@@ -26,13 +26,13 @@ const main = async () => {
 
   await auctionFactoryContract.deployed();
 
-  const SimpleAuctionFactory = await hre.ethers.getContractFactory("AuctionFactory");
-  const SimpleAuctionContract = await SimpleAuctionFactory.deploy();
+  const simpleAuctionFactory = await hre.ethers.getContractFactory("AuctionFactory");
+  const simpleAuctionContract = await simpleAuctionFactory.deploy();
 
-  await SimpleAuctionContract.deployed();
+  await simpleAuctionContract.deployed();
 
   console.log("AuctionFactory address: ", auctionFactoryContract.address);
-  console.log("SimpleAuction address: ", SimpleAuctionContract.address);
+  console.log("SimpleAuction address: ", simpleAuctionContract.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
