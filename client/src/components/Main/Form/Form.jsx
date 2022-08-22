@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 
-import { useSpeechContext } from '@speechly/react-client';
+// import { useSpeechContext } from '@speechly/react-client';
 import Snackbar from '../../Snackbar/Snackbar';
 import formatDate from '../../../utils/formatDate';
 import { ExpenseTrackerContext } from '../../../context/context';
@@ -20,7 +20,7 @@ const NewTransactionForm = () => {
   const classes = useStyles();
   const { addTransaction } = useContext(ExpenseTrackerContext);
   const [formData, setFormData] = useState(initialState);
-  const { segment } = useSpeechContext();
+  // const { segment } = useSpeechContext();
   const [open, setOpen] = React.useState(false);
 
   const createTransaction = () => {
@@ -37,45 +37,45 @@ const NewTransactionForm = () => {
     setFormData(initialState);
   };
 
-  useEffect(() => {
-    if (segment) {
-      if (segment.intent.intent === 'add_expense') {
-        setFormData({ ...formData, type: 'Expense' });
-      } else if (segment.intent.intent === 'add_income') {
-        setFormData({ ...formData, type: 'Income' });
-      } else if (segment.isFinal && segment.intent.intent === 'create_transaction') {
-        return createTransaction();
-      } else if (segment.isFinal && segment.intent.intent === 'cancel_transaction') {
-        return setFormData(initialState);
-      }
+  // useEffect(() => {
+  //   if (segment) {
+  //     if (segment.intent.intent === 'add_expense') {
+  //       setFormData({ ...formData, type: 'Expense' });
+  //     } else if (segment.intent.intent === 'add_income') {
+  //       setFormData({ ...formData, type: 'Income' });
+  //     } else if (segment.isFinal && segment.intent.intent === 'create_transaction') {
+  //       return createTransaction();
+  //     } else if (segment.isFinal && segment.intent.intent === 'cancel_transaction') {
+  //       return setFormData(initialState);
+  //     }
 
-      segment.entities.forEach((s) => {
-        const category = `${s.value.charAt(0)}${s.value.slice(1).toLowerCase()}`;
+  //     segment.entities.forEach((s) => {
+  //       const category = `${s.value.charAt(0)}${s.value.slice(1).toLowerCase()}`;
 
-        switch (s.type) {
-          case 'amount':
-            setFormData({ ...formData, amount: s.value });
-            break;
-          case 'category':
-            if (incomeCategories.map((iC) => iC.type).includes(category)) {
-              setFormData({ ...formData, type: 'Income', category });
-            } else if (expenseCategories.map((iC) => iC.type).includes(category)) {
-              setFormData({ ...formData, type: 'Expense', category });
-            }
-            break;
-          case 'date':
-            setFormData({ ...formData, date: s.value });
-            break;
-          default:
-            break;
-        }
-      });
+  //       switch (s.type) {
+  //         case 'amount':
+  //           setFormData({ ...formData, amount: s.value });
+  //           break;
+  //         case 'category':
+  //           if (incomeCategories.map((iC) => iC.type).includes(category)) {
+  //             setFormData({ ...formData, type: 'Income', category });
+  //           } else if (expenseCategories.map((iC) => iC.type).includes(category)) {
+  //             setFormData({ ...formData, type: 'Expense', category });
+  //           }
+  //           break;
+  //         case 'date':
+  //           setFormData({ ...formData, date: s.value });
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     });
 
-      if (segment.isFinal && formData.amount && formData.category && formData.type && formData.date) {
-        createTransaction();
-      }
-    }
-  }, [segment]);
+  //     if (segment.isFinal && formData.amount && formData.category && formData.type && formData.date) {
+  //       createTransaction();
+  //     }
+  //   }
+  // }, [segment]);
 
   const selectedCategories = formData.type === 'Income' ? incomeCategories : expenseCategories;
 
@@ -83,14 +83,7 @@ const NewTransactionForm = () => {
     <Grid container spacing={2}>
       <Snackbar open={open} setOpen={setOpen} />
       <Grid item xs={12}>
-        <Typography align="center" variant="subtitle2" gutterBottom>
-        {segment ? (
-        <div className="segment">
-          {segment.words.map((w) => w.value).join(" ")}
-        </div>
-      ) : null}
-         {/* {isSpeaking ? <BigTranscript /> : 'Start adding transactions'}  */}
-        </Typography>
+
       </Grid>
       <Grid item xs={12}>
         <FormControl fullWidth>

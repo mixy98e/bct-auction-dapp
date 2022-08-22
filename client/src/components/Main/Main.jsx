@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardHeader, CardContent, Typography, Grid, Divider } from '@material-ui/core';
-import { useSpeechContext } from '@speechly/react-client';
+// import { useSpeechContext } from '@speechly/react-client';
 import { ExpenseTrackerContext } from '../../context/context';
 import useStyles from './styles';
 import Form from './Form/Form';
@@ -12,13 +12,13 @@ const ExpenseTracker = () => {
   const { balance } = useContext(ExpenseTrackerContext);
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} style={{height: '100%'}}>
       <CardHeader title="Simple Auction" subheader="Powered by Blockhain Technologies" />
       <CardContent>
         <Typography align="center" variant="h5">Add new item</Typography>
-        {/* <Typography variant="subtitle1" style={{ lineHeight: '1.5em', marginTop: '20px' }}>
+        <Typography variant="subtitle1" style={{ lineHeight: '1.5em', marginTop: '20px' }}>
           <InfoCard />
-        </Typography> */}
+        </Typography>
         <Divider className={classes.divider} />
         <Form />
       </CardContent>
