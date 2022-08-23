@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { red, green } from '@material-ui/core/colors';
+import { Visibility } from '@material-ui/icons';
 
 export default makeStyles((theme) => ({
   avatarIncome: {
@@ -11,7 +12,26 @@ export default makeStyles((theme) => ({
     backgroundColor: red[500],
   },
   list: {
-    maxHeight: '450px',
+    maxHeight: '390px',
     overflow: 'auto',
   },
+  chipWonVisible: {
+    color: "#D9AE5F",
+    borderColor: "#A6882E",
+    cursor: "pointer"
+  },
+  chipLossVisible: {
+    color: "#BF0041",
+    borderColor: "#7F002B",
+    cursor: "pointer"
+  },
+  displayNoneClass: {
+    display: "none",
+  },
+  iconWon: {
+    color: "#D9AE5F",
+  },
+  iconLoss: {
+    color: "#BF0041",
+  }
 }));
