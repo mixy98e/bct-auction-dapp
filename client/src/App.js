@@ -6,6 +6,7 @@ import { Grid } from '@material-ui/core';
 
 import { Details, Main } from './components';
 import useStyles from './styles';
+import Navbar from './components/Navbar/Navbar';
 
 const App = () => {
   const classes = useStyles();
@@ -32,11 +33,12 @@ const App = () => {
         </Grid>
         <Grid style={{height: '90%', width: '100%'}} item xs={12} sm={7}>
           <Grid style={{height: '10%', paddingBottom: '30px'}}>
-            <div style={{height: '100%', width: '100%', backgroundColor: "red" }}>
-            </div>
+            {/* <div style={{height: '100%', width: '100%', backgroundColor: "red" }}>
+            </div> */}
+            <Navbar />
           </Grid>
           <Grid item xs={12} sm={12} className={classes.mobile} style={{height: '86%'}}>
-            <Details title="Income" />
+            <Details title="Active" />
           </Grid>
             <Grid item xs={12} sm={4} className={classes.desktop}>
               <Details title="Income" />
