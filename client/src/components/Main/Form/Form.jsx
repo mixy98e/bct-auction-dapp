@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem, ComboBox } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 
-// import { useSpeechContext } from '@speechly/react-client';
 import Snackbar from '../../Snackbar/Snackbar';
 import formatDate from '../../../utils/formatDate';
 import { ExpenseTrackerContext } from '../../../context/context';
@@ -12,7 +11,7 @@ import useStyles from './styles';
 const initialState = {
   amount: '',
   category: '',
-  type: 'Income',
+  type: 'hours',
   date: formatDate(new Date()),
 };
 
@@ -83,21 +82,33 @@ const NewTransactionForm = () => {
     <Grid container spacing={2}>
       <Snackbar open={open} setOpen={setOpen} />
       <Grid item xs={12}>
-
+      <Typography variant="subtitle1" style={{ lineHeight: '1.5em', paddingTop: '6px'}}>
+          <div elevation={3} style={{ textAlign: 'center', color: 'gray'}}>
+            Creat auction <br /> Use form to create anonymus blockchain based auction.
+          </div>
+        </Typography>
       </Grid>
-      <Grid item xs={12}>
+      {/* <Grid item xs={2}></Grid> */}
+      {/* <Grid item xs={6}>
         <FormControl fullWidth>
-          <TextField label="Address" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} fullWidth />
+          <TextField label="Duration of the auction" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} fullWidth />
+        </FormControl>
+      </Grid> */}
+      {/* <Grid item xs={2}></Grid> */}
+      <Grid item xs={6}>
+        <FormControl fullWidth>
+            <InputLabel>Select time unit</InputLabel>
+            <Select value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})}>
+                <MenuItem value="days">Days</MenuItem>
+                <MenuItem value="hours">Hours</MenuItem>
+                <MenuItem value="minutes">Minutes</MenuItem>
+                <MenuItem value="seconds">Seconds</MenuItem>
+            </Select>
         </FormControl>
       </Grid>
       <Grid item xs={6}>
         <FormControl fullWidth>
-          <TextField label="Price" value={formData.address} onChange={(e) => setFormData({ ...formData, price: e.target.value })} fullWidth />
-        </FormControl>
-      </Grid>
-      <Grid item xs={6}>
-        <FormControl fullWidth>
-          <TextField label="Time to End" value={formData.timeToEnd} onChange={(e) => setFormData({ ...formData, timeToEnd: e.target.value })} fullWidth />
+          <TextField label="Duration of auction" type="number" value={formData.timeToEnd} onChange={(e) => setFormData({ ...formData, timeToEnd: e.target.value })} fullWidth />
         </FormControl>
       </Grid>
 
@@ -110,7 +121,7 @@ const NewTransactionForm = () => {
       <Grid item xs={6}>
         <TextField fullWidth label="Date" type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: formatDate(e.target.value) })} />
       </Grid> */}
-      <Button className={classes.button} variant="outlined" color="primary" fullWidth onClick={createTransaction}>Create</Button>
+      <Button className={classes.button} variant="outlined" color="primary" fullWidth onClick={createTransaction}>Create auction</Button>
     </Grid>
   );
 };
