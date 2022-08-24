@@ -25,7 +25,7 @@ const App = () => {
     <div style={{height: '100%'}}>
       <Grid className={classes.grid} alignItems="center" container spacing={0}  justify="center" style={{height: '100%'}}>
         <Grid ref={main} item xs={12} sm={1} className={classes.main} style={{height: '90%'}} >
-          <div style={{height: '100%', width: '100%', backgroundColor: "red" }}>
+          <div style={{height: '100%', width: '100%', backgroundColor: "black" }}>
           </div>
         </Grid>
         <Grid ref={main} item xs={12} sm={3} className={classes.main} style={{height: '90%'}} >
