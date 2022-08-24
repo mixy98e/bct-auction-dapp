@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem, ComboBox } from '@material-ui/core';
+import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem, ComboBox, createChainedFunction } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 
 import Snackbar from '../../Snackbar/Snackbar';
@@ -7,6 +7,7 @@ import formatDate from '../../../utils/formatDate';
 import { ExpenseTrackerContext } from '../../../context/context';
 import { incomeCategories, expenseCategories } from '../../../constants/categories';
 import useStyles from './styles';
+import { AuctionFactoryContext } from '../../../context/AuctionFactoryContext';
 
 const initialState = {
   amount: '',
@@ -16,25 +17,38 @@ const initialState = {
 };
 
 const NewTransactionForm = () => {
+
+  const { formData, createAuction, handleChange } = useContext(AuctionFactoryContext);
+
+  const handleSubmit = (e) => {
+    const { unitOfTime, time } = formData;
+    e.preventDefault();
+
+    if(unitOfTime && time) {
+      console.log("uso");
+      createAuction(unitOfTime, time);
+    }
+  }
+
   const classes = useStyles();
   const { addTransaction } = useContext(ExpenseTrackerContext);
-  const [formData, setFormData] = useState(initialState);
+  // const [formData, setFormData] = useState(initialState);
   // const { segment } = useSpeechContext();
   const [open, setOpen] = React.useState(false);
 
-  const createTransaction = () => {
-    if (Number.isNaN(Number(formData.amount)) || !formData.date.includes('-')) return;
+  // const createTransaction = () => {
+  //   if (Number.isNaN(Number(formData.amount)) || !formData.date.includes('-')) return;
 
-    if (incomeCategories.map((iC) => iC.type).includes(formData.category)) {
-      setFormData({ ...formData, type: 'Income' });
-    } else if (expenseCategories.map((iC) => iC.type).includes(formData.category)) {
-      setFormData({ ...formData, type: 'Expense' });
-    }
+  //   if (incomeCategories.map((iC) => iC.type).includes(formData.category)) {
+  //     setFormData({ ...formData, type: 'Income' });
+  //   } else if (expenseCategories.map((iC) => iC.type).includes(formData.category)) {
+  //     setFormData({ ...formData, type: 'Expense' });
+  //   }
 
-    setOpen(true);
-    addTransaction({ ...formData, amount: Number(formData.amount), id: uuidv4() });
-    setFormData(initialState);
-  };
+  //   setOpen(true);
+  //   addTransaction({ ...formData, amount: Number(formData.amount), id: uuidv4() });
+  //   setFormData(initialState);
+  // };
 
   // useEffect(() => {
   //   if (segment) {
@@ -76,7 +90,7 @@ const NewTransactionForm = () => {
   //   }
   // }, [segment]);
 
-  const selectedCategories = formData.type === 'Income' ? incomeCategories : expenseCategories;
+  // const selectedCategories = formData.type === 'Income' ? incomeCategories : expenseCategories;
 
   return (
     <Grid container spacing={2}>
@@ -98,7 +112,7 @@ const NewTransactionForm = () => {
       <Grid item xs={6}>
         <FormControl fullWidth>
             <InputLabel>Select time unit</InputLabel>
-            <Select value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})}>
+            <Select name="unitOfTime" onChange={(e) => handleChange(e, 'unitOfTime')}>
                 <MenuItem value="days">Days</MenuItem>
                 <MenuItem value="hours">Hours</MenuItem>
                 <MenuItem value="minutes">Minutes</MenuItem>
@@ -108,7 +122,7 @@ const NewTransactionForm = () => {
       </Grid>
       <Grid item xs={6}>
         <FormControl fullWidth>
-          <TextField label="Duration of auction" type="number" value={formData.timeToEnd} onChange={(e) => setFormData({ ...formData, timeToEnd: e.target.value })} fullWidth />
+          <TextField label="Duration of auction" type="number" name="time" onChange={(e) => handleChange(e, 'time')} fullWidth />
         </FormControl>
       </Grid>
 
@@ -121,7 +135,7 @@ const NewTransactionForm = () => {
       <Grid item xs={6}>
         <TextField fullWidth label="Date" type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: formatDate(e.target.value) })} />
       </Grid> */}
-      <Button className={classes.button} variant="outlined" color="primary" fullWidth onClick={createTransaction}>Create auction</Button>
+      <Button className={classes.button} variant="outlined" color="primary" onClick={handleSubmit} fullWidth>Create auction</Button>
     </Grid>
   );
 };

@@ -6,11 +6,15 @@ import { Provider } from './context/context';
 import App from './App';
 import './index.css';
 
+import { AuctionFactoryProvider } from './context/AuctionFactoryContext'
+
 ReactDOM.render(
   
+  <AuctionFactoryProvider>
     <Provider>
       <App />
-    </Provider>,
+    </Provider>
+  </AuctionFactoryProvider>,
   
   document.getElementById('root'),
 );

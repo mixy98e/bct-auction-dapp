@@ -6,10 +6,13 @@ import useStyles from './styles';
 import Form from './Form/Form';
 import List from './List/List';
 import InfoCard from '../InfoCard';
+import { AuctionFactoryContext } from '../../context/AuctionFactoryContext';
 
-const ExpenseTracker = () => {
+
+const ExpenseTracker = (props) => {
   const classes = useStyles();
-  const { balance } = useContext(ExpenseTrackerContext);
+  // const { balance } = useContext(ExpenseTrackerContext);
+  // const { currentAccount } = useContext(AuctionFactoryContext);
 
   return (
     <Card className={classes.root} style={{height: '100%'}}>
@@ -20,11 +23,11 @@ const ExpenseTracker = () => {
             className={classes.avatarImage}
             align="center"
             alt=""
-            width="100"
-            height="100"
+            width="120"
+            height="120"
             src={`data:image/png;base64,${new Identicon(
-              '0xc0ffee254729296a45a3885639AC7E10F9d54979',
-              100
+              props.currentAccount,
+              120
               ).toString()}`}
           />
         </Typography>
@@ -32,7 +35,7 @@ const ExpenseTracker = () => {
           <div elevation={3} style={{ textAlign: 'center', padding: '0 10%' }}>
             You're address:
             <p style={{ color: "gray", wordWrap: "break-word"}}>
-              0x999999cf1046e68e36E1aA2E0E07105eDDD1f08E
+              {props.currentAccount}
             </p>
           </div>
         </Typography>

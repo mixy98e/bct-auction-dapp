@@ -49,4 +49,13 @@ contract AuctionFactory {
         return true;
     }
 
+    function rate(address owner, address auction, uint8 rate) public {
+        require(rate <= 5, "Maximum value for rate is 5.");
+        require(rate > 0, "Minimum value for rate is 1.");
+        require(canRate(owner, auction), "You're not allowed to rate.");
+        hasVoted[owner][auction][msg.sender] = true;
+        ratings[owner].ratingSum += rate;
+        ratings[owner].numberOfRates++;
+    }
+
 }
