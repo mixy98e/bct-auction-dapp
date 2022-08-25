@@ -16,7 +16,7 @@ contract AuctionFactory {
 
     address[] public allAuctions;
 
-    function createAuction(uint _biddingTime) public {
+    function createAuction(uint _biddingTime) public returns(address createdAuction) {
         SimpleAuction newSimpleAuction = new SimpleAuction(_biddingTime, payable(msg.sender));
         allAuctions.push(address(newSimpleAuction));
 
@@ -24,6 +24,8 @@ contract AuctionFactory {
             ratings[msg.sender].active = true;
             owners.push(msg.sender);
         }
+
+        return address(newSimpleAuction);
     }
 
     function getAllAuctions() public view returns(address[] memory) {

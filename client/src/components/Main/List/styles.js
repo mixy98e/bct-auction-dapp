@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
     backgroundColor: red[500],
   },
   list: {
-    maxHeight: '390px',
+    maxHeight: '82%',
     overflow: 'auto',
   },
   chipWonVisible: {

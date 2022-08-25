@@ -5,38 +5,44 @@ import { Chip } from '@material-ui/core'
 
 import { ExpenseTrackerContext } from '../../../context/context';
 import useStyles from './styles';
+import { AuctionFactoryContext } from '../../../context/AuctionFactoryContext';
 
 const List = () => {
   const classes = useStyles();
   const { transactions, deleteTransaction } = useContext(ExpenseTrackerContext);
   const isWon = 'won';
-  const ownerAddress = '44c68123-5b86-4cc8-b915-bb9e16cebe6a';
+  const { fetchAllAuctions, allAuctions, allAuctionsDetails, fetchAuctionDetails } = useContext(AuctionFactoryContext);
 
-  const withdrawAssets = () => {
-    console.log('clicked on chip');
+  const loadAllAuctions = () => {
+    fetchAuctionDetails(allAuctions);
   }
+  
 
   return (
     <MUIList dense={false} className={classes.list}>
-      {transactions.map((transaction) => (
-        <Slide direction="down" in mountOnEnter unmountOnExit key={transaction.id}>
+      <button onClick={loadAllAuctions}>dsadsa</button>
+      {allAuctionsDetails.map((auction) => (
+        <Slide direction="down" in mountOnEnter unmountOnExit key={auction.address}>
           <ListItem>
             <ListItemAvatar>
-              <Avatar className={ownerAddress === transaction.winner ? classes.avatarIncome : classes.avatarExpense}>
+              <Avatar className={/*ownerAddress === transaction.winner ? */classes.avatarIncome/* : classes.avatarExpense*/}>
                 <Gavel />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={transaction.name} secondary={`$${transaction.price} - ${transaction.endDate}`} />
+            <div style={{width: '60%'}}>
+              <ListItemText secondary={auction.address} style={{wordBreak: 'break-word', color: 'gray'}} /*secondary={`$${transaction.price} - ${transaction.endDate}`}*/ />
+            </div>
             <ListItemSecondaryAction>
-              <Chip label="Won" variant="outlined" className={ownerAddress === transaction.winner ? classes.chipWonVisible : classes.displayNoneClass}/>
-              <Chip label="Lost" variant="outlined" className={ownerAddress !== transaction.winner ? classes.chipLossVisible : classes.displayNoneClass}/>
+              <Chip label={auction.highestBid ? auction.highestBid._hex : '0'} variant="outlined" className={classes.chipWonVisible}/>
+              {/* <Chip label="Lost" variant="outlined" className={ownerAddress !== transaction.winner ? classes.chipLossVisible : classes.displayNoneClass}/>} */}
+              {/* <ListItemText secondary={auction.highestBid? auction.highestBid._hex: '---' } style={{wordBreak: 'break-word', color: 'gray'}} /*secondary={`$${transaction.price} - ${transaction.endDate}`}*/}
 
-              <IconButton edge="end" aria-label="won" className={ownerAddress === transaction.winner ? classes.iconWon : classes.displayNoneClass} /*nClick={() => deleteTransaction(transaction.id)}*/>
+              <IconButton edge="end" aria-label="won" className={/*ownerAddress === transaction.winner ? */classes.iconWon /*: classes.displayNoneClass*/} /*nClick={() => deleteTransaction(transaction.id)}*/>
                 <EmojiEvents />
               </IconButton>
-              <IconButton edge="end" aria-label="loss" onClick={withdrawAssets} className={ownerAddress !== transaction.winner ? classes.iconLoss : classes.displayNoneClass} /*onClick={() => deleteTransaction(transaction.id)}*/>
+              {/* {<IconButton edge="end" aria-label="loss" onClick={withdrawAssets} className={ownerAddress !== transaction.winner ? classes.iconLoss : classes.displayNoneClass} onClick={() => deleteTransaction(transaction.id)}>
                 <Reply />
-              </IconButton>
+              </IconButton>} */}
             </ListItemSecondaryAction>
           </ListItem>
         </Slide>

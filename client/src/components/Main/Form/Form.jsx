@@ -26,15 +26,18 @@ const NewTransactionForm = () => {
 
     if(unitOfTime && time) {
       console.log("uso");
-      createAuction(unitOfTime, time);
+      const newAuctionAddress = createAuction(unitOfTime, time);
+      //setNewCreatedAuction(newAuctionAddress);
     }
   }
 
   const classes = useStyles();
-  const { addTransaction } = useContext(ExpenseTrackerContext);
+  // const { addTransaction } = useContext(ExpenseTrackerContext);
   // const [formData, setFormData] = useState(initialState);
   // const { segment } = useSpeechContext();
   const [open, setOpen] = React.useState(false);
+
+  /* const [ newCreatedAuction, setNewCreatedAuction ] = React.useState(''); */
 
   // const createTransaction = () => {
   //   if (Number.isNaN(Number(formData.amount)) || !formData.date.includes('-')) return;
@@ -136,6 +139,11 @@ const NewTransactionForm = () => {
         <TextField fullWidth label="Date" type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: formatDate(e.target.value) })} />
       </Grid> */}
       <Button className={classes.button} variant="outlined" color="primary" onClick={handleSubmit} fullWidth>Create auction</Button>
+      {/* { newCreatedAuction !== '' && (<Typography variant="subtitle1" style={{ lineHeight: '1.5em', paddingTop: '6px'}}>
+          <div elevation={3} style={{ textAlign: 'center', color: 'gray'}}>
+            {newCreatedAuction}
+          </div>
+        </Typography>)} */}
     </Grid>
   );
 };
