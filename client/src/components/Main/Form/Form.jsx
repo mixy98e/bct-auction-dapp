@@ -1,11 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem, ComboBox, createChainedFunction } from '@material-ui/core';
-import { v4 as uuidv4 } from 'uuid';
 
 import Snackbar from '../../Snackbar/Snackbar';
 import formatDate from '../../../utils/formatDate';
-import { ExpenseTrackerContext } from '../../../context/context';
-import { incomeCategories, expenseCategories } from '../../../constants/categories';
 import useStyles from './styles';
 import { AuctionFactoryContext } from '../../../context/AuctionFactoryContext';
 
@@ -99,9 +96,9 @@ const NewTransactionForm = () => {
     <Grid container spacing={2}>
       <Snackbar open={open} setOpen={setOpen} />
       <Grid item xs={12}>
-      <Typography variant="subtitle1" style={{ lineHeight: '1.5em', paddingTop: '6px'}}>
+      <Typography variant="subtitle1" style={{ lineHeight: '1.5em'}}>
           <div elevation={3} style={{ textAlign: 'center', color: 'gray'}}>
-            Creat auction <br /> Use form to create anonymus blockchain based auction.
+            Use form to create anonymus blockchain based auction.
           </div>
         </Typography>
       </Grid>
@@ -115,7 +112,7 @@ const NewTransactionForm = () => {
       <Grid item xs={6}>
         <FormControl fullWidth>
             <InputLabel>Select time unit</InputLabel>
-            <Select name="unitOfTime" onChange={(e) => handleChange(e, 'unitOfTime')}>
+            <Select name="unitOfTime" value={formData.unitOfTime} onChange={(e) => handleChange(e, 'unitOfTime')}>
                 <MenuItem value="days">Days</MenuItem>
                 <MenuItem value="hours">Hours</MenuItem>
                 <MenuItem value="minutes">Minutes</MenuItem>
@@ -125,7 +122,7 @@ const NewTransactionForm = () => {
       </Grid>
       <Grid item xs={6}>
         <FormControl fullWidth>
-          <TextField label="Duration of auction" type="number" name="time" onChange={(e) => handleChange(e, 'time')} fullWidth />
+          <TextField label="Duration of auction" type="number" name="time" value={formData.time} onChange={(e) => handleChange(e, 'time')} fullWidth />
         </FormControl>
       </Grid>
 

@@ -23,15 +23,15 @@ const ExpenseTracker = (props) => {
             className={classes.avatarImage}
             align="center"
             alt=""
-            width="120"
-            height="120"
+            width="50"
+            height="50"
             src={`data:image/png;base64,${new Identicon(
               props.currentAccount,
-              120
+              50
               ).toString()}`}
           />
         </Typography>
-        <Typography variant="subtitle1" style={{ lineHeight: '1.5em', marginTop: '20px', paddingTop: '6px'}}>
+        <Typography variant="subtitle1" style={{ lineHeight: '1.5em', marginTop: '10px', paddingTop: '6px'}}>
           <div elevation={3} style={{ textAlign: 'center', padding: '0 10%' }}>
             You're address:
             <p style={{ color: "gray", wordWrap: "break-word"}}>

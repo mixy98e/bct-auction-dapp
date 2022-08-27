@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { List as MUIList, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, IconButton, Slide } from '@material-ui/core';
-import { Delete, Gavel, EmojiEvents, Reply} from '@material-ui/icons';
+import { Delete, Gavel, EmojiEvents, Reply } from '@material-ui/icons';
 import { Chip } from '@material-ui/core'
 
 import { ExpenseTrackerContext } from '../../../context/context';
@@ -11,7 +11,7 @@ const List = () => {
   const classes = useStyles();
   const { transactions, deleteTransaction } = useContext(ExpenseTrackerContext);
   const isWon = 'won';
-  const { fetchAllAuctions, allAuctions, allAuctionsDetails, fetchAuctionDetails } = useContext(AuctionFactoryContext);
+  const { fetchAllAuctions, allAuctions, allAuctionsDetails, fetchAuctionDetails, currentAccount } = useContext(AuctionFactoryContext);
 
   const loadAllAuctions = () => {
     fetchAuctionDetails(allAuctions);
@@ -20,9 +20,8 @@ const List = () => {
 
   return (
     <MUIList dense={false} className={classes.list}>
-      <button onClick={loadAllAuctions}>dsadsa</button>
       {allAuctionsDetails.map((auction) => (
-        <Slide direction="down" in mountOnEnter unmountOnExit key={auction.address}>
+        currentAccount.toLowerCase() === auction.beneficiary.toLowerCase() && (<Slide direction="down" in mountOnEnter unmountOnExit key={auction.address}>
           <ListItem>
             <ListItemAvatar>
               <Avatar className={/*ownerAddress === transaction.winner ? */classes.avatarIncome/* : classes.avatarExpense*/}>
@@ -45,7 +44,7 @@ const List = () => {
               </IconButton>} */}
             </ListItemSecondaryAction>
           </ListItem>
-        </Slide>
+        </Slide>)
       ))}
     </MUIList>
   );

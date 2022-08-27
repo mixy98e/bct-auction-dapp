@@ -34,6 +34,8 @@ export const AuctionFactoryProvider = ({children}) => {
     const [formData, setFormData] = useState({ unitOfTime: '', time: '' });
     const [isLoading, setIsLoading] = useState(false);
     const [allAuctions, setAllAuctions] = useState([]);
+
+    let globalSet = new Set();
     const [allAuctionsDetails, setAllAuctionsDetails] = useState([]);
 
     const handleChange = (e, name) => {
@@ -140,31 +142,51 @@ export const AuctionFactoryProvider = ({children}) => {
         setAllAuctionsDetails([]);
         let auctionDetailsTemp = [];
         allAuctionsParam.forEach(el => {
+            
             console.log('u foreach')
             const simpleAuctionContract = getSimpleAuctionEthereumContract(el);
-            let auctionObject = {};
+            // let auctionObject = {};
 
-            auctionObject['address'] = el;
-            simpleAuctionContract.beneficiary().then((data) => {
+            // auctionObject['address'] = el;
+            /*simpleAuctionContract.beneficiary().then((data) => {
                 auctionObject['beneficiary'] = data;
-            });
-            simpleAuctionContract.auctionEndTime().then((data) => {
+            });*/
+            /*simpleAuctionContract.auctionEndTime().then((data) => {
                 auctionObject['auctionEndTime'] = data;
-            });
-            simpleAuctionContract.highestBidder().then((data) => {
+            });*/
+            /*simpleAuctionContract.highestBidder().then((data) => {
                 auctionObject['highestBidder'] = data;
-            });
-            simpleAuctionContract.highestBid().then((data) => {
+            });*/
+            /*simpleAuctionContract.highestBid().then((data) => {
                 auctionObject['highestBid'] = data;
-            });
+            });*/
 
-            auctionDetailsTemp.push(auctionObject);
+            updateAuctionsDetailsState(el, 
+                simpleAuctionContract.beneficiary(),
+                simpleAuctionContract.auctionEndTime(),
+                simpleAuctionContract.highestBidder(),
+                simpleAuctionContract.highestBid()
+            );
+
+            // auctionDetailsTemp.push(auctionObject);
         });
-
-
-         let tmp = await auctionDetailsTemp[auctionDetailsTemp.length - 1].highestBid;
         setAllAuctionsDetails(auctionDetailsTemp);
+    }
 
+    const updateAuctionsDetailsState = async (address, beneficiary, auctionEndTime, highestBidder, highestBid) => {
+        let tempAuctionDetailsArray = allAuctionsDetails;
+        let tempAuctionDetailsObject = {};
+        tempAuctionDetailsObject['address'] = await address;
+        tempAuctionDetailsObject['beneficiary'] = await beneficiary;
+        tempAuctionDetailsObject['auctionEndTime'] = await auctionEndTime;
+        tempAuctionDetailsObject['highestBidder'] = await highestBidder;
+        tempAuctionDetailsObject['highestBid'] = await highestBid;
+        tempAuctionDetailsArray.push(tempAuctionDetailsObject);
+        console.log("uso u ovo drugo", tempAuctionDetailsArray)
+
+        globalSet.add(tempAuctionDetailsObject);
+        // allAuctionsDetails.push(tempAuctionDetailsObject);
+        setAllAuctionsDetails([...globalSet]);
     }
 
 

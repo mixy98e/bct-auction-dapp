@@ -1,6 +1,9 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, Typography, Button, Grid, FormControl, TextField } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { InputAdornment } from '@material-ui/core';
+import { Search } from '@material-ui/icons';
+
 // import { Doughnut } from 'react-chartjs-2';
 import useStyles from './styles';
 import useTransactions from '../../useTransactions';
@@ -14,13 +17,24 @@ const NavbarCard = ({ title, subheader }) => {
   }
 
   return (
-    <Card className={title === 'Active' ? classes.active : classes.expense}>
+    <Card className={classes.active}>
       {/* <CardHeader title={title} subheader={subheader} /> */}
-      <CardContent container style={{flexWrap: "wrap", display:'flex', justifyContent: "space-between"}}>
+      <CardContent container style={{flexWrap: "wrap", display:'flex', justifyContent: "space-between", marginTop: '-1.15%'}}>
 
           <div style={{width: '35%'}}>
             <FormControl fullWidth>
-              <TextField label="Search for auction by address" type="text" /*value={} onChange={(e) => setFormData({ ...formData, timeToEnd: e.target.value })}*/ fullWidth />
+              <TextField label="Search for auction by address" 
+                    type="text" 
+                    /*value={} onChange={(e) => setFormData({ ...formData, timeToEnd: e.target.value })}*/ 
+                    fullWidth 
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <Search style={{color: 'gray'}}/>
+                        </InputAdornment>
+                       )
+                      }}
+                    />
             </FormControl>
           </div>
 
@@ -44,9 +58,10 @@ const NavbarCard = ({ title, subheader }) => {
               aria-label="Platform"
               style={{height: '36px', paddingTop: '10px'}}
             >
-              <ToggleButton value="web" selected="true">MY AUCTIONS</ToggleButton>
-              <ToggleButton value="android">ALL AUCTIONS</ToggleButton>
-              <ToggleButton value="ios">ACTIVE AUCTIONS</ToggleButton>
+              <ToggleButton value="myAuctions" selected="true">MY AUCTIONS</ToggleButton>
+              <ToggleButton value="myBids" selected="true">MY BIDS</ToggleButton>
+              <ToggleButton value="allAuctions">ALL AUCTIONS</ToggleButton>
+              <ToggleButton value="activeAuctions">ACTIVE AUCTIONS</ToggleButton>
             </ToggleButtonGroup>
             </div>
       </CardContent>

@@ -1,13 +1,13 @@
 // DEPLOYED ADDRESSES
 
-// AuctionFactory address:  0x7E84Ca788c00830d6913fdB8a6FA993e7364dF92
-// SimpleAuction address:  0xF100829fB28D530129EE0d878a715E62432E0F5A
+// AuctionFactory address:  0xaaD652C16e6cF1B1A68992c283126aEB8dC5E4f4
+// SimpleAuction address:  0x9F71D86c27336Dcb53b15839bBF25E88F990E143
 
 import abiAf from './AuctionFactory.json';
 import abiSa from './SimpleAuction.json'
 
 export const contractABIAuctionFactory = abiAf.abi;
-export const contractAddressFactory = '0x7E84Ca788c00830d6913fdB8a6FA993e7364dF92';
+export const contractAddressFactory = '0xaaD652C16e6cF1B1A68992c283126aEB8dC5E4f4';
 
 export const contractABISimpleAuction = abiSa.abi;
-export const contractAddressSimpleAuction = '0xF100829fB28D530129EE0d878a715E62432E0F5A';
+export const contractAddressSimpleAuction = '0x9F71D86c27336Dcb53b15839bBF25E88F990E143';

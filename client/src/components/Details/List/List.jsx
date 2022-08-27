@@ -1,25 +1,34 @@
 import React, { useContext } from 'react';
 import { List as MUIList, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, Button, Slide, FormControl, TextField } from '@material-ui/core';
 import { Delete, Gavel, EmojiEvents} from '@material-ui/icons';
-
-import { ExpenseTrackerContext } from '../../../context/context';
+import { Chip, Divider } from '@material-ui/core';
+import { AuctionFactoryContext } from '../../../context/AuctionFactoryContext';
 import useStyles from './styles';
 
 const List = () => {
   const classes = useStyles();
-  const { transactions, deleteTransaction } = useContext(ExpenseTrackerContext);
+  const { fetchAllAuctions, allAuctions, allAuctionsDetails, fetchAuctionDetails, currentAccount } = useContext(AuctionFactoryContext);
+
+
 
   return (
-    <MUIList dense={true} className={classes.list}>
-      {transactions.map((transaction) => (
-        <Slide direction="down" in mountOnEnter unmountOnExit key={transaction.id}>
-          <ListItem>
+    <MUIList dense={false} className={classes.list}>
+      {allAuctionsDetails.map((auction) => (
+        <Slide direction="down" in mountOnEnter unmountOnExit key={auction.address}>
+          <ListItem  style={{paddingTop: '6px'}}>
             <ListItemAvatar>
-              <Avatar className={transaction.type === 'Income' ? classes.avatarIncome : classes.avatarExpense}>
+              <Avatar className={classes.avatar}>
                 <Gavel />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={transaction.category} secondary={`$${transaction.amount} - ${transaction.date}`} />
+            <div style={{display: 'flex', flexDirection: "column"}}>
+              <ListItemText secondary={`Auction: ${auction.address}`} />
+              <ListItemText  secondary={`Owner: ${auction.beneficiary}`} />
+              <ListItemText  secondary={`Highest bidder: ${auction.highestBidder}`} />
+              <Chip className={ currentAccount === auction.highestBidder ? classes.chipStyleGreen : classes.chipStyleRed}
+                    label={`Current value: ${auction.highestBid._hex}  -  ending time: ${auction.auctionEndTime._hex}`} 
+                    variant="outlined" />
+            </div>
             <ListItemSecondaryAction>
               {/* <IconButton edge="end" aria-label="delete" onClick={() => deleteTransaction(transaction.id)}>
                 <EmojiEvents />
@@ -27,12 +36,14 @@ const List = () => {
               {/* <IconButton edge="end" aria-label="delete" onClick={() => deleteTransaction(transaction.id)}>
                 <Delete />
               </IconButton> */}
-              <FormControl>
-                <TextField label="Price" />
-              </FormControl>
-              <FormControl>
-                <Button className={classes.button} variant="outlined" color="primary">Bid</Button>
-              </FormControl>
+              <div style={{display: 'flex', flexDirection: "column", height: '100%'}}>
+                <FormControl>
+                  <TextField label="You're price" />
+                </FormControl>
+                <FormControl style={{paddingTop: "4px"}}>
+                  <Button className={classes.button} variant="outlined" color="primary" >Place bid</Button>
+                </FormControl>
+              </div>
             </ListItemSecondaryAction>
           </ListItem>
         </Slide>
