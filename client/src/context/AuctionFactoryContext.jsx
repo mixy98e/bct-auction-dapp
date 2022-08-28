@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {ethers} from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 
 import { contractABIAuctionFactory, contractAddressFactory, contractABISimpleAuction } from '../utils/constants';
 
@@ -137,38 +137,18 @@ export const AuctionFactoryProvider = ({children}) => {
         }
     }
 
-
     const fetchAuctionDetails = async (allAuctionsParam) => {
         setAllAuctionsDetails([]);
         let auctionDetailsTemp = [];
         allAuctionsParam.forEach(el => {
-            
             console.log('u foreach')
             const simpleAuctionContract = getSimpleAuctionEthereumContract(el);
-            // let auctionObject = {};
-
-            // auctionObject['address'] = el;
-            /*simpleAuctionContract.beneficiary().then((data) => {
-                auctionObject['beneficiary'] = data;
-            });*/
-            /*simpleAuctionContract.auctionEndTime().then((data) => {
-                auctionObject['auctionEndTime'] = data;
-            });*/
-            /*simpleAuctionContract.highestBidder().then((data) => {
-                auctionObject['highestBidder'] = data;
-            });*/
-            /*simpleAuctionContract.highestBid().then((data) => {
-                auctionObject['highestBid'] = data;
-            });*/
-
             updateAuctionsDetailsState(el, 
                 simpleAuctionContract.beneficiary(),
                 simpleAuctionContract.auctionEndTime(),
                 simpleAuctionContract.highestBidder(),
                 simpleAuctionContract.highestBid()
             );
-
-            // auctionDetailsTemp.push(auctionObject);
         });
         setAllAuctionsDetails(auctionDetailsTemp);
     }
@@ -189,6 +169,58 @@ export const AuctionFactoryProvider = ({children}) => {
         setAllAuctionsDetails([...globalSet]);
     }
 
+    const placeBid = async (auctionAddress) => {
+        try {
+            if(!ethereum) 
+                return alert("Please install metamask");
+
+            console.log(auctionAddress)
+            const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
+            console.log(simpleAuctionContract.bid);
+           
+            // await simpleAuctionContract.bid()
+            const price = ethers.utils.parseUnits('1.0', 'ether')
+            setTimeout(() => {
+                simpleAuctionContract.bid({
+                    value: ethers.utils.parseEther("0.1"),
+                    gasLimit: 6721970,
+                    // gasPrice: 2000000000,
+                    // nonce: "0"
+               })
+
+            }, 3000);
+            /*.bid({
+                value: price
+            
+            });
+            transaction.wait();
+    this.state.socialNetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+        
+            /*1000000000000000000
+
+            {
+                value: 1,
+                gas: 30000,
+                gasPriceInWei : 1000
+            }
+
+             const gas = await TodolistContract.methods
+      .addToList(itemToAdd)
+      .estimateGas();
+    await TodolistContract.methods
+      .addToList(itemToAdd)
+      .send({ from: account, gas });
+            */
+
+        } catch (error) {
+            console.log(error);
+            // throw new Error("No ethereum object.");
+        }
+    }
+
 
     useEffect(() => {
         checkIfWalletIsConnected();
@@ -205,7 +237,9 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 allAuctions,
                                                 fetchAllAuctions,
                                                 allAuctionsDetails,
-                                                fetchAuctionDetails }}>
+                                                fetchAuctionDetails,
+                                                placeBid
+                                            }}>
             {children}
         </AuctionFactoryContext.Provider>
     )
