@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ethers, BigNumber } from 'ethers';
+// import Web3 from 'web3';
 
 import { contractABIAuctionFactory, contractAddressFactory, contractABISimpleAuction } from '../utils/constants';
 
@@ -7,9 +8,11 @@ import { contractABIAuctionFactory, contractAddressFactory, contractABISimpleAuc
 export const AuctionFactoryContext = React.createContext();
 
 const { ethereum } = window;
+const provider = new ethers.providers.Web3Provider(ethereum);
 
 const getFactoryEthereumContract = () => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
+    // const provider = new ethers.providers.Web3Provider(ethereum);
+
     const signer = provider.getSigner();
 
     const auctionFactoryContract = new ethers.Contract(contractAddressFactory, contractABIAuctionFactory, signer);
@@ -19,7 +22,7 @@ const getFactoryEthereumContract = () => {
 
 
 const getSimpleAuctionEthereumContract = (contractAddress) => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
+    // const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
 
     const simpleAuctionContract = new ethers.Contract(contractAddress, contractABISimpleAuction, signer);
@@ -85,7 +88,7 @@ export const AuctionFactoryProvider = ({children}) => {
             const auctionFactoryContract = getFactoryEthereumContract();
 
 
-            let convertedTime;
+            let convertedTime 
             switch (unitOfTime) {
                 case 'Days':
                     convertedTime = time * 24 * 3600;
@@ -104,7 +107,7 @@ export const AuctionFactoryProvider = ({children}) => {
                     break;
             }
 
-            const transactionHash = await auctionFactoryContract.createAuction(convertedTime);
+            const transactionHash = await auctionFactoryContract.createAuction(Math.floor(Date.now() / 1000) + convertedTime);
             setIsLoading(true);
             console.log(`Loading - ${transactionHash.hash}`);
             await transactionHash.wait();
@@ -179,16 +182,39 @@ export const AuctionFactoryProvider = ({children}) => {
             console.log(simpleAuctionContract.bid);
            
             // await simpleAuctionContract.bid()
-            const price = ethers.utils.parseUnits('1.0', 'ether')
+            // const price = ethers.utils.parseUnits('1.0', 'ether')
+            // let options = { gasPrice: 1000000000, gasLimit: 85000, nonce: 45, value: 0 };
+
+            // window.web3 = new Web3(window.ethereum)
+            // window.web3 = new Web3(window.web3.currentProvider)
+            // const web3 = window.web3
+            // const simpleAuction = new web3.eth.Contract(contractABISimpleAuction, auctionAddress)
+
+            // let state;
+            // state = { 
+            //     account: currentAccount,
+            //     simpleAuction: simpleAuction
+            // };
+
+            // console.log(state.simpleAuction.methods.bid().send({ from: state.account, gas:  250000 ,  value: '1300000000000000000' }))
+            
+
+            // const socialNetwork = web3.eth.Contract(SocialNetwork.abi, networkData.address)
+            //     this.setState({ socialNetwork })
+
+            // this.state.socialNetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount })
+
             setTimeout(() => {
                 simpleAuctionContract.bid({
-                    value: ethers.utils.parseEther("0.1"),
-                    gasLimit: 6721970,
-                    // gasPrice: 2000000000,
-                    // nonce: "0"
+                    value: ethers.utils.parseUnits("4"),
+                    // value: "10000000000000",
+                    // value: "1000000000000000000",
+                    gasLimit: 3000000, //6721975,
+                    //gasPrice: simpleAuctionContract.estimateGas
+                    
                })
 
-            }, 3000);
+            }, 1000);
             /*.bid({
                 value: price
             
