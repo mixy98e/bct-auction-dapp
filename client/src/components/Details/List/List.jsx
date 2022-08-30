@@ -1,14 +1,18 @@
 import React, { useContext } from 'react';
 import { List as MUIList, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, Button, Slide, FormControl, TextField } from '@material-ui/core';
-import { Delete, Gavel, EmojiEvents} from '@material-ui/icons';
-import { Chip, Divider } from '@material-ui/core';
+import { Delete, Gavel, EmojiEvents } from '@material-ui/icons';
+import { Chip, Divider, Typography, InputAdornment } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
+import { Icon } from '@iconify/react';
 import { AuctionFactoryContext } from '../../../context/AuctionFactoryContext';
+import Accordion from './Accordion/Accordion';
 import useStyles from './styles';
+import { useState } from 'react';
 
 const List = () => {
   const classes = useStyles();
-  const { fetchAllAuctions, allAuctions, allAuctionsDetails, fetchAuctionDetails, currentAccount, placeBid } = useContext(AuctionFactoryContext);
+  const { allAuctionsDetails, currentAccount, placeBid, handleBidPriceChange } = useContext(AuctionFactoryContext);
+  const { bidPrice, setBidPrice} = useState(0);
 
   const submitBidPlacement = async (auctionAddress) => {
     placeBid(auctionAddress);
@@ -27,11 +31,12 @@ const List = () => {
               </ListItemAvatar>
               <div style={{display: 'flex', flexDirection: "column"}}>
                 <ListItemText secondary={`Auction: ${auction.address}`} />
-                <ListItemText secondary={`Owner: ${auction.beneficiary}`} />
-                <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} />
+                {/* <ListItemText secondary={`Owner: ${auction.beneficiary}`} /> */}
                 <Chip className={ currentAccount === auction.highestBidder ? classes.chipStyleGreen : classes.chipStyleRed}
                       label={`Current value: ${auction.highestBid._hex}  -  ending time: ${auction.auctionEndTime._hex}`} 
                       variant="outlined" />
+                <div style={{height: '1px'}}></div>
+                {/* <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} /> */}
               </div>
               <ListItemSecondaryAction>
                 {/* <IconButton edge="end" aria-label="delete" onClick={() => deleteTransaction(transaction.id)}>
@@ -40,19 +45,32 @@ const List = () => {
                 {/* <IconButton edge="end" aria-label="delete" onClick={() => deleteTransaction(transaction.id)}>
                   <Delete />
                 </IconButton> */}
+
                 <div style={{display: 'flex', flexDirection: "column", height: '100%', paddingTop: ''}}>
                   <FormControl>
-                    <TextField label="You're price" />
+                    <TextField label="You're price (ETH)" type="number" fullWidth onChange={(e) => handleBidPriceChange(e)}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <Icon icon="cib:ethereum" style={{color: 'purple'}} />
+                        </InputAdornment>
+                       )
+                      }}/>
                   </FormControl>
                   <FormControl style={{paddingTop: "4px"}}>
                     <Button className={classes.button} variant="outlined" color="primary"  onClick={() => submitBidPlacement(auction.address)}>Place bid</Button>
+                    
                   </FormControl>
-                  {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}> */}
+                  <div style={{ paddingTop: '5px' }}>
                     <Rating name="simple-controlled" value={3} />
-                  {/* </div> */}
+                  </div>
+
                 </div>
               </ListItemSecondaryAction>
             </ListItem>
+            <div style={{paddingTop: '20px'}}>
+              <Accordion auctionDetails={auction}/>
+            </div>
           </div>
         </Slide>
       ))}
