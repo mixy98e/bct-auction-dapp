@@ -234,9 +234,15 @@ export const AuctionFactoryProvider = ({children}) => {
         }
     }
 
-    const calculateAndSetRate = (ratings) => {
+    const calculateAndSetRate = async (ratings) => {
         console.log(ratings)
-        const value = ratings.ratingSum._hex / ratings.numberOfRates._hex;
+        let value;
+        if(hexToDecimal((await ratings.numberOfRates)._hex) == '0' || hexToDecimal((await ratings.numberOfRates)._hex) == 0){
+            value = 1;
+        }
+        else { 
+            value = hexToDecimal((await ratings.ratingSum )._hex) / hexToDecimal((await ratings.numberOfRates)._hex);
+        }
         setCurrentRate(value);
     }
 

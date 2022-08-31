@@ -24,7 +24,7 @@ const List = () => {
     <MUIList dense={false} className={classes.list}>
       {allAuctionsDetails.map((auction) => (
         <div>
-            <ListDetailItem auction={auction} />
+            <ListDetailItem auction={auction} key={auction.address} />
         </div>
       ))}
     </MUIList>
