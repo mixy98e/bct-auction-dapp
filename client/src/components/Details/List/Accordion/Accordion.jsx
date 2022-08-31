@@ -49,7 +49,7 @@ export default function ControlledAccordions({auctionDetails}) {
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography className={classes.heading}><ListItemText secondary="Details." style={{color: blue[500]}}/></Typography>
+          <Typography className={classes.heading}><ListItemText secondary="Details" style={{color: blue[500]}}/></Typography>
           <Typography className={classes.secondaryHeading}><ListItemText secondary={`Highest bidder: ${auctionDetails.highestBidder}`} /></Typography>
         </AccordionSummary>
         <AccordionDetails>
