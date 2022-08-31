@@ -58,7 +58,7 @@ export default function ControlledAccordions({auctionDetails}) {
             <Typography className={classes.smallFont}>
                 <strong>Owner:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.beneficiary} <br />
                 <strong>Address:</strong>&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.address} <br />
-                <strong>Price:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.highestBid._hex} <br />
+                <strong>Price:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.highestBid} ETH <br />
                 <strong>Bidder:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.highestBidder} <br />
             </Typography>
           </Grid>
