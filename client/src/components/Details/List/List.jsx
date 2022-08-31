@@ -8,6 +8,7 @@ import { AuctionFactoryContext } from '../../../context/AuctionFactoryContext';
 import ListDetailItem from './ListItem/ListDetailItem';
 import useStyles from './styles';
 import { useState } from 'react';
+import unixToDate from '../../../utils/unixToDate';
 
 const List = () => {
   const classes = useStyles();

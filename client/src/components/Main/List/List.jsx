@@ -16,7 +16,7 @@ const List = () => {
   const loadAllAuctions = () => {
     fetchAuctionDetails(allAuctions);
   }
-  
+
 
   return (
     <MUIList dense={false} className={classes.list}>
@@ -32,13 +32,11 @@ const List = () => {
               <ListItemText secondary={auction.address} style={{wordBreak: 'break-word', color: 'gray'}} /*secondary={`$${transaction.price} - ${transaction.endDate}`}*/ />
             </div>
             <ListItemSecondaryAction>
-              <Chip label={auction.highestBid ? auction.highestBid._hex : '0'} variant="outlined" className={classes.chipWonVisible}/>
+              <Chip label={auction.highestBid ? `${auction.highestBid} ETH` : '0 ETH'} variant="outlined" className={classes.chipWonVisible}/>
               {/* <Chip label="Lost" variant="outlined" className={ownerAddress !== transaction.winner ? classes.chipLossVisible : classes.displayNoneClass}/>} */}
               {/* <ListItemText secondary={auction.highestBid? auction.highestBid._hex: '---' } style={{wordBreak: 'break-word', color: 'gray'}} /*secondary={`$${transaction.price} - ${transaction.endDate}`}*/}
 
-              <IconButton edge="end" aria-label="won" className={/*ownerAddress === transaction.winner ? */classes.iconWon /*: classes.displayNoneClass*/} /*nClick={() => deleteTransaction(transaction.id)}*/>
-                <EmojiEvents />
-              </IconButton>
+              
               {/* {<IconButton edge="end" aria-label="loss" onClick={withdrawAssets} className={ownerAddress !== transaction.winner ? classes.iconLoss : classes.displayNoneClass} onClick={() => deleteTransaction(transaction.id)}>
                 <Reply />
               </IconButton>} */}

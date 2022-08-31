@@ -3,6 +3,8 @@ import { ethers, BigNumber } from 'ethers';
 // import Web3 from 'web3';
 
 import { contractABIAuctionFactory, contractAddressFactory, contractABISimpleAuction } from '../utils/constants';
+import hexToEth from '../utils/hexToEth';
+import hexToDecimal from '../utils/hexToDecimal';
 
 
 export const AuctionFactoryContext = React.createContext();
@@ -93,23 +95,23 @@ export const AuctionFactoryProvider = ({children}) => {
 
             let convertedTime 
             switch (unitOfTime) {
-                case 'Days':
+                case 'days':
                     convertedTime = time * 24 * 3600;
                     break;
-                case 'Hours':
+                case 'hours':
                     convertedTime = time * 3600;
                     break;
-                case 'Minutes':
+                case 'minutes':
                     convertedTime = time * 60;
                     break;
-                case 'Seconds':
+                case 'seconds':
                     convertedTime = time;
                     break;    
                 default:
                     convertedTime = 10;
                     break;
             }
-            const transactionHash = await auctionFactoryContract.createAuction(Math.floor(Date.now() / 1000) + convertedTime);
+            const transactionHash = await auctionFactoryContract.createAuction(convertedTime);
             setIsLoading(true);
             console.log(`Loading - ${transactionHash.hash}`);
             await transactionHash.wait();
@@ -174,9 +176,9 @@ export const AuctionFactoryProvider = ({children}) => {
         let tempAuctionDetailsObject = {};
         tempAuctionDetailsObject['address'] = await address;
         tempAuctionDetailsObject['beneficiary'] = await beneficiary;
-        tempAuctionDetailsObject['auctionEndTime'] = await auctionEndTime;
+        tempAuctionDetailsObject['auctionEndTime'] = hexToDecimal((await auctionEndTime)._hex);
         tempAuctionDetailsObject['highestBidder'] = await highestBidder;
-        tempAuctionDetailsObject['highestBid'] = await highestBid;
+        tempAuctionDetailsObject['highestBid'] = hexToEth((await highestBid)._hex);
         tempAuctionDetailsArray.push(tempAuctionDetailsObject);
         console.log("uso u ovo drugo", tempAuctionDetailsArray)
 
