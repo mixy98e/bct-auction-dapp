@@ -37,10 +37,11 @@ export const AuctionFactoryProvider = ({children}) => {
 
     const [currentAccount, setCurrentAccount] = useState("");
     const [formData, setFormData] = useState({ unitOfTime: '', time: '' });
-    const [bidPriceFormData, setBidPriceFormData] = useState(0);
+    // const [bidPriceFormData, setBidPriceFormData] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [allAuctions, setAllAuctions] = useState([]);
     const [auctionBidders, setAuctionBidders] = useState(new Map());
+    const [currentRate, setCurrentRate] = useState(0.0);
 
     let globalSet = new Set();
     const [allAuctionsDetails, setAllAuctionsDetails] = useState([]);
@@ -49,9 +50,9 @@ export const AuctionFactoryProvider = ({children}) => {
         setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
     }
 
-    const handleBidPriceChange = (e) => {
-        setBidPriceFormData(e.target.value);
-    }
+    // const handleBidPriceChange = (e) => {
+    //     setBidPriceFormData(e.target.value);
+    // }
 
     const checkIfWalletIsConnected = async () => {
         try {
@@ -61,6 +62,7 @@ export const AuctionFactoryProvider = ({children}) => {
             if(accounts.length) {
                 setCurrentAccount(accounts[0]);
                 fetchAllAuctions();
+                getCurrentAccountRates(accounts[0]);
                 // get my auctions
                 // ...
             } else {
@@ -185,13 +187,13 @@ export const AuctionFactoryProvider = ({children}) => {
         setAllAuctionsDetails([...globalSet]);
     }
 
-    const placeBid = async (auctionAddress) => {
+    const placeBid = async (auctionAddress, bidPriceFormData) => {
         try {
             if(!ethereum) 
                 return alert("Please connect or install metamask");
             console.log(auctionAddress)
             const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
-            console.log('price to bid in eth', bidPriceFormData);
+            console.log('price to bid in eth (context) ', bidPriceFormData);
             setTimeout(() => {
                 simpleAuctionContract.bid({
                     value: ethers.utils.parseUnits(bidPriceFormData),
@@ -199,12 +201,43 @@ export const AuctionFactoryProvider = ({children}) => {
                     //gasLimit: 6721975,
                     //gasPrice: simpleAuctionContract.estimateGas
                })
-               setBidPriceFormData(0);
             }, 1000);
         } catch (error) {
             console.log(error);
             throw new Error("Ethereum transaction invalid.");
         }
+    }
+
+    const rateOwner = async (ownerAddress, auctionAddress, rateValue) => {
+        try {
+            if(!ethereum) 
+                return alert("Please connect or install metamask");
+            const auctionFactoryContract = await getFactoryEthereumContract();
+            console.log('rateOwner (context) ', ownerAddress, auctionAddress, rateValue);
+            auctionFactoryContract.rate(ownerAddress, auctionAddress, rateValue)
+        } catch (error) {
+            console.log(error);
+            throw new Error("Ethereum action invalid.");
+        }
+    }
+
+    const getCurrentAccountRates = async (account) => {
+        try {
+            if(!ethereum) 
+                return alert("Please connect or install metamask");
+            const auctionFactoryContract = await getFactoryEthereumContract();
+            const ratings = await auctionFactoryContract.ratings(account);
+            calculateAndSetRate(ratings);
+        } catch (error) {
+            console.log(error);
+            throw new Error("Ethereum action invalid.");
+        }
+    }
+
+    const calculateAndSetRate = (ratings) => {
+        console.log(ratings)
+        const value = ratings.ratingSum._hex / ratings.numberOfRates._hex;
+        setCurrentRate(value);
     }
 
 
@@ -227,7 +260,8 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 placeBid,
                                                 auctionBidders,
                                                 fetchAuctionBidders,
-                                                handleBidPriceChange
+                                                rateOwner,
+                                                currentRate
                                             }}>
             {children}
         </AuctionFactoryContext.Provider>
