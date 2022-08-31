@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react';
 import Accordion from '../Accordion/Accordion';
 import useStyles from './styles';
 import { AuctionFactoryContext } from '../../../../context/AuctionFactoryContext';
+import unixToDate from '../../../utils/unixToDate';
 
 const ListDetailItem = ({auction}) => {
   const classes = useStyles();
@@ -43,7 +44,7 @@ const ListDetailItem = ({auction}) => {
             <ListItemText secondary={`Auction: ${auction.address}`} />
             {/* <ListItemText secondary={`Owner: ${auction.beneficiary}`} /> */}
             <Chip className={ currentAccount === auction.highestBidder ? classes.chipStyleGreen : classes.chipStyleRed}
-                  label={`Current value: ${auction.highestBid._hex}  -  ending time: ${auction.auctionEndTime._hex}`} 
+                  label={`Current value: ${auction.highestBid} ETH - Ending time: ${unixToDate(auction.auctionEndTime)}`} 
                   variant="outlined" />
             <div style={{height: '1px'}}></div>
             {/* <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} /> */}
