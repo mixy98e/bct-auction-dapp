@@ -42,6 +42,8 @@ export const AuctionFactoryProvider = ({children}) => {
     const [allAuctions, setAllAuctions] = useState([]);
     const [auctionBidders, setAuctionBidders] = useState(new Map());
     const [currentRate, setCurrentRate] = useState(0.0);
+    const [msg, setMsg] = useState("");
+    const [open, setOpen] = useState(false);
 
     let globalSet = new Set();
     const [allAuctionsDetails, setAllAuctionsDetails] = useState([]);
@@ -214,9 +216,12 @@ export const AuctionFactoryProvider = ({children}) => {
                 return alert("Please connect or install metamask");
             const auctionFactoryContract = await getFactoryEthereumContract();
             console.log('rateOwner (context) ', ownerAddress, auctionAddress, rateValue);
-            auctionFactoryContract.rate(ownerAddress, auctionAddress, rateValue)
+            await auctionFactoryContract.rate(ownerAddress, auctionAddress, rateValue)
         } catch (error) {
             console.log(error);
+            console.log("*-*-*-*-*-*-");
+            setMsg("You are not eiligible to rate the owner");
+            setOpen(true);
             throw new Error("Ethereum action invalid.");
         }
     }
@@ -267,7 +272,10 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 auctionBidders,
                                                 fetchAuctionBidders,
                                                 rateOwner,
-                                                currentRate
+                                                currentRate,
+                                                msg,
+                                                open,
+                                                setOpen
                                             }}>
             {children}
         </AuctionFactoryContext.Provider>
