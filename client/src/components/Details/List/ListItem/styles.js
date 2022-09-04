@@ -8,12 +8,12 @@ export default makeStyles((theme) => ({
     },
     avaterRed: {
         color: '#fff',
-        backgroundColor: '#f44336',
+        backgroundColor: '#f50057',
     },
     chipStyleRed: {
         borderRadius: '3px',
-        color: red[500],
-        borderColor: '#f44336',
+        color: '#f50057',
+        borderColor: 'rgba(245, 0, 87, 0.5)',
         height: '36px'
     },
     chipStyleGreen: {

@@ -15,6 +15,8 @@ const NavbarCard = ({ title, subheader }) => {
   
   const handleViewChange = (event, newView) => {
     setView(newView);
+    // here will go filter invocation
+    // filter will be passed to Details/List via separate context
   };
 
   const control = {

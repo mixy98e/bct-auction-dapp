@@ -35,7 +35,10 @@ const ExpenseTracker = (props) => {
         </Typography>
         <Typography variant="subtitle1" style={{ lineHeight: '1.5em', marginTop: '10px', paddingTop: '6px'}}>
           <div elevation={3} style={{ textAlign: 'center', padding: '0 10%' }}>
-            <Star style={{color: 'gold'}}/> {currentRate}
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+              <Star style={{color: 'gold'}}/> 
+              <div style={{paddingBottom: '5px'}}>{currentRate}</div>
+            </div>
             <p style={{ color: "gray", wordWrap: "break-word"}}>
               {props.currentAccount}
             </p>

@@ -12,7 +12,7 @@ import compareDate from '../../../../utils/compareDate';
 
 const ListDetailItem = ({auction}) => {
   const classes = useStyles();
-  const { currentAccount, placeBid, rateOwner } = useContext(AuctionFactoryContext);
+  const { currentAccount, placeBid, rateOwner, withdrawAssets } = useContext(AuctionFactoryContext);
   const [ bidPrice, setBidPrice ] = useState(0);
   const [ rateValue, setRateValue ] = useState(0);
 
@@ -29,6 +29,10 @@ const ListDetailItem = ({auction}) => {
       rateOwner(ownerAddress, auctionAddress, rateValue);
       setRateValue(0);
     }
+  }
+
+  const submitWithdraw = async (auctionAddress) => {
+    withdrawAssets(auctionAddress);
   }
 
 
@@ -49,6 +53,11 @@ const ListDetailItem = ({auction}) => {
                   label={`Current value: ${auction.highestBid} ETH - Ending time: ${unixToDate(auction.auctionEndTime)}`} 
                   variant="outlined" />
             </strong>
+            {auction.pendingReturn > 0  &&  (
+              <Button className={classes.button} variant="outlined" color="secondary"  onClick={() => submitWithdraw(auction.address)}>
+                Withdraw:&nbsp;&nbsp; <strong>{auction.pendingReturn} ETH</strong>
+              </Button>
+            )}
             <div style={{height: '1px'}}></div>
             {/* <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} /> */}
           </div>
@@ -73,7 +82,6 @@ const ListDetailItem = ({auction}) => {
               </FormControl>
               <FormControl style={{paddingTop: "4px"}}>
                 <Button className={classes.button} variant="outlined" color="primary"  onClick={() => submitBidPlacement(auction.address)}>Place bid</Button>
-                
               </FormControl>
               <div style={{ paddingTop: '5px', display: 'flex', justifyContent: 'start' }}>
               <Rating name={`simple-controlled-adr:${auction.address}`} value={rateValue} key={auction.address} onChange={(event, newValue) => { setRateValue(newValue) }} />
