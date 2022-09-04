@@ -24,7 +24,7 @@ const List = () => {
         currentAccount.toLowerCase() === auction.beneficiary.toLowerCase() && (<Slide direction="down" in mountOnEnter unmountOnExit key={auction.address}>
           <ListItem>
             <ListItemAvatar>
-              <Avatar className={/*ownerAddress === transaction.winner ? */classes.avatarIncome/* : classes.avatarExpense*/}>
+              <Avatar className={classes.avatarBlue}>
                 <Gavel />
               </Avatar>
             </ListItemAvatar>

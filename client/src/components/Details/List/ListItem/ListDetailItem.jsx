@@ -8,6 +8,7 @@ import Accordion from '../Accordion/Accordion';
 import useStyles from './styles';
 import { AuctionFactoryContext } from '../../../../context/AuctionFactoryContext';
 import unixToDate from '../../../../utils/unixToDate';
+import compareDate from '../../../../utils/compareDate';
 
 const ListDetailItem = ({auction}) => {
   const classes = useStyles();
@@ -36,16 +37,18 @@ const ListDetailItem = ({auction}) => {
       <div  style={{/*borderBottom: '1px solid lightgray',*/ paddingTop: '15px', marginBottom: '10px'}}>
         <ListItem>
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
+            <Avatar className={compareDate(auction.auctionEndTime) ? classes.avatarGreen : classes.avaterRed}>
               <Gavel />
             </Avatar>
           </ListItemAvatar>
           <div style={{display: 'flex', flexDirection: "column"}}>
             <ListItemText secondary={`Auction: ${auction.address}`} />
             {/* <ListItemText secondary={`Owner: ${auction.beneficiary}`} /> */}
-            <Chip className={ currentAccount === auction.highestBidder ? classes.chipStyleGreen : classes.chipStyleRed}
+            <strong>
+              <Chip className={compareDate(auction.auctionEndTime) ? classes.chipStyleGreen : classes.chipStyleRed}
                   label={`Current value: ${auction.highestBid} ETH - Ending time: ${unixToDate(auction.auctionEndTime)}`} 
                   variant="outlined" />
+            </strong>
             <div style={{height: '1px'}}></div>
             {/* <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} /> */}
           </div>
@@ -63,7 +66,7 @@ const ListDetailItem = ({auction}) => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="start">
-                      <Icon icon="cib:ethereum" style={{color: 'purple'}} />
+                      <Icon icon="cib:ethereum" style={{color: '#673ab7'}} />
                     </InputAdornment>
                     )
                   }}/>

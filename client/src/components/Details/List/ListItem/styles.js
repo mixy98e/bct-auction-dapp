@@ -2,21 +2,24 @@ import { makeStyles } from '@material-ui/core/styles';
 import { red, green, blue } from '@material-ui/core/colors';
 
 export default makeStyles((theme) => ({
-    avatar: {
+    avatarGreen: {
         color: '#fff',
-        backgroundColor: blue[500],
-
+        backgroundColor: '#4caf50',
+    },
+    avaterRed: {
+        color: '#fff',
+        backgroundColor: '#f44336',
     },
     chipStyleRed: {
         borderRadius: '3px',
         color: red[500],
-        borderColor: red[500],
+        borderColor: '#f44336',
         height: '36px'
     },
     chipStyleGreen: {
         borderRadius: '3px',
         color: green[500],
-        borderColor: green[500],
+        borderColor: '#4caf50',
         height: '36px'
     },
     avatarExpense: {

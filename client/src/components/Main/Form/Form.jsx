@@ -91,7 +91,7 @@ const NewTransactionForm = () => {
   // }, [segment]);
 
   // const selectedCategories = formData.type === 'Income' ? incomeCategories : expenseCategories;
-  console.log("ACA", msg);
+  // console.log("ACA", msg);
   return (
     <Grid container spacing={2}>
       <Snackbar open={open} setOpen={setOpen} msg={msg}/>

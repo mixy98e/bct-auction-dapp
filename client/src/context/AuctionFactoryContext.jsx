@@ -65,6 +65,8 @@ export const AuctionFactoryProvider = ({children}) => {
                 setCurrentAccount(accounts[0]);
                 fetchAllAuctions();
                 getCurrentAccountRates(accounts[0]);
+                // fetchAuctionBidders();
+
                 // get my auctions
                 // ...
             } else {
@@ -145,11 +147,13 @@ export const AuctionFactoryProvider = ({children}) => {
         }
     }
 
-    const fetchAuctionBidders = async (auctionAddress) => {
-        // const simpleAuctionContract = getSimpleAuctionEthereumContract(auctionAddress);
-        // const allAuctionBidders = await simpleAuctionContract.pendingReturns(0);
-        // auctionBidders.set(auctionAddress, allAuctionBidders);
-        // console.log(allAuctionBidders);
+    const fetchAuctionBidders = async (/*auctionAddress*/) => {
+        // console.log('fetchAuctionBidders')
+        // const simpleAuctionContract = getSimpleAuctionEthereumContract('0x26f2eE64B5387D72Da29025Ce777B7657396eb5d');
+        // console.log('contract', simpleAuctionContract)
+        // const allAuctionBidders = await simpleAuctionContract.pendingReturns();
+        // // auctionBidders.set(auctionAddress, allAuctionBidders);
+        // console.log('ALL AUCTION BIDDERS', allAuctionBidders);
     }
 
     const fetchAuctionDetails = async (allAuctionsParam) => {
@@ -157,7 +161,6 @@ export const AuctionFactoryProvider = ({children}) => {
             setAllAuctionsDetails([]);
             let auctionDetailsTemp = [];
             allAuctionsParam.forEach(el => {
-                console.log('u foreach')
                 const simpleAuctionContract = getSimpleAuctionEthereumContract(el);
                 updateAuctionsDetailsState(el, 
                     simpleAuctionContract.beneficiary(),
@@ -182,7 +185,6 @@ export const AuctionFactoryProvider = ({children}) => {
         tempAuctionDetailsObject['highestBidder'] = await highestBidder;
         tempAuctionDetailsObject['highestBid'] = hexToEth((await highestBid)._hex);
         tempAuctionDetailsArray.push(tempAuctionDetailsObject);
-        console.log("uso u ovo drugo", tempAuctionDetailsArray)
 
         globalSet.add(tempAuctionDetailsObject);
         // allAuctionsDetails.push(tempAuctionDetailsObject);
@@ -243,10 +245,10 @@ export const AuctionFactoryProvider = ({children}) => {
         console.log(ratings)
         let value;
         if(hexToDecimal((await ratings.numberOfRates)._hex) == '0' || hexToDecimal((await ratings.numberOfRates)._hex) == 0){
-            value = 1;
+            value = parseFloat(1).toFixed(1);
         }
         else { 
-            value = hexToDecimal((await ratings.ratingSum )._hex) / hexToDecimal((await ratings.numberOfRates)._hex);
+            value = parseFloat(hexToDecimal((await ratings.ratingSum )._hex) / hexToDecimal((await ratings.numberOfRates)._hex)).toFixed(1);
         }
         setCurrentRate(value);
     }
@@ -270,7 +272,6 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 fetchAuctionDetails,
                                                 placeBid,
                                                 auctionBidders,
-                                                fetchAuctionBidders,
                                                 rateOwner,
                                                 currentRate,
                                                 msg,
