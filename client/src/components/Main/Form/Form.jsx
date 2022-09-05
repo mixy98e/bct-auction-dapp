@@ -15,7 +15,7 @@ const initialState = {
 
 const NewTransactionForm = () => {
 
-  const { formData, createAuction, handleChange } = useContext(AuctionFactoryContext);
+  const { formData, createAuction, handleChange, msg, open, setOpen } = useContext(AuctionFactoryContext);
 
   const handleSubmit = (e) => {
     const { unitOfTime, time } = formData;
@@ -32,7 +32,7 @@ const NewTransactionForm = () => {
   // const { addTransaction } = useContext(ExpenseTrackerContext);
   // const [formData, setFormData] = useState(initialState);
   // const { segment } = useSpeechContext();
-  const [open, setOpen] = React.useState(false);
+  //const [open, setOpen] = React.useState(false);
 
   /* const [ newCreatedAuction, setNewCreatedAuction ] = React.useState(''); */
 
@@ -91,10 +91,10 @@ const NewTransactionForm = () => {
   // }, [segment]);
 
   // const selectedCategories = formData.type === 'Income' ? incomeCategories : expenseCategories;
-
+  // console.log("ACA", msg);
   return (
     <Grid container spacing={2}>
-      <Snackbar open={open} setOpen={setOpen} />
+      <Snackbar open={open} setOpen={setOpen} msg={msg}/>
       <Grid item xs={12}>
       <Typography variant="subtitle1" style={{ lineHeight: '1.5em'}}>
           <div elevation={3} style={{ textAlign: 'center', color: 'gray'}}>

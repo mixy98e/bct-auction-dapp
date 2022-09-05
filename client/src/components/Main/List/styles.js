@@ -1,13 +1,21 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { red, green } from '@material-ui/core/colors';
+import { red, green, blue } from '@material-ui/core/colors';
 import { Visibility } from '@material-ui/icons';
 
 export default makeStyles((theme) => ({
-  avatarIncome: {
+  avatarGreen: {
     color: '#fff',
     backgroundColor: green[500],
   },
-  avatarExpense: {
+  avatarBlue: {
+    color: '#fff',
+    backgroundColor: '#3f50b5',
+  },
+  avatarPurple: {
+    color: '#fff',
+    backgroundColor: 'purple',
+  },
+  avatarRed: {
     color: theme.palette.getContrastText(red[500]),
     backgroundColor: red[500],
   },

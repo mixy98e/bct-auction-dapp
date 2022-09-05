@@ -18,11 +18,11 @@ const App = () => {
     <div style={{height: '100%'}}>
       {currentAccount && (
         <Grid className={classes.grid} alignItems="center" container spacing={0}  justify="center" style={{height: '100%'}}>
-          <Grid ref={main} item xs={12} sm={1} className={classes.main} style={{height: '90%'}} >
-            <div style={{height: '100%', width: '100%', backgroundColor: "black" }}>
+          {/* <Grid ref={main} item xs={12} sm={1} className={classes.main} style={{height: '90%'}} >
+            <div style={{height: '100%', width: '100%', backgroundColor: "black", borderRadius: '5px' }}>
             </div>
-          </Grid>
-          <Grid ref={main} item xs={12} sm={3} className={classes.main} style={{height: '90%'}} >
+          </Grid> */}
+          <Grid ref={main} item xs={12} sm={4} className={classes.main} style={{height: '90%'}} >
             <Main currentAccount={currentAccount}/>
           </Grid>
           <Grid style={{height: '90%', width: '100%'}} item xs={12} sm={7}>
@@ -34,9 +34,9 @@ const App = () => {
             <Grid item xs={12} sm={12} className={classes.mobile} style={{height: '86%'}}>
               <Details title="Active" />
             </Grid>
-              <Grid item xs={12} sm={4} className={classes.desktop}>
+            <Grid item xs={12} sm={4} className={classes.desktop}>
                 <Details title="Income" />
-              </Grid>
+            </Grid>
           </Grid>
 
           {/* <Grid item xs={12} sm={4} className={classes.last}>
