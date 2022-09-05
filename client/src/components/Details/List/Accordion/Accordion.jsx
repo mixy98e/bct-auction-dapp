@@ -32,13 +32,12 @@ const useStyles = makeStyles((theme) => ({
 export default function ControlledAccordions({auctionDetails}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const { auctionBidders, fetchAuctionBidders } = useContext(AuctionFactoryContext);
+  const { auctionBidders } = useContext(AuctionFactoryContext);
 
 
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
-    fetchAuctionBidders(auctionDetails.address)
   };
 
   return (
@@ -49,17 +48,18 @@ export default function ControlledAccordions({auctionDetails}) {
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography className={classes.heading}><ListItemText secondary="Details" style={{color: blue[500]}}/></Typography>
+          <Typography className={classes.heading}><ListItemText secondary="Show details" style={{color: blue[500]}}/></Typography>
           <Typography className={classes.secondaryHeading}><ListItemText secondary={`Highest bidder: ${auctionDetails.highestBidder}`} /></Typography>
         </AccordionSummary>
         <AccordionDetails>
         <Grid container spacing={2}>
           <Grid item xs={8}>
             <Typography className={classes.smallFont}>
-                <strong>Owner:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.beneficiary} <br />
-                <strong>Address:</strong>&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.address} <br />
-                <strong>Price:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.highestBid} ETH <br />
-                <strong>Bidder:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {auctionDetails.highestBidder} <br />
+                <strong>Owner:</strong>&emsp;&emsp;&emsp;&emsp;&emsp; {auctionDetails.beneficiary} <br />
+                <strong>Address:</strong>&emsp;&emsp;&emsp;&emsp; {auctionDetails.address} <br />
+                <strong>Price:</strong>&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; {auctionDetails.highestBid} ETH <br />
+                <strong>Bidder:</strong>&emsp;&emsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp; {auctionDetails.highestBidder} <br />
+                <strong>Pending return</strong>&emsp;&nbsp; {auctionDetails.pendingReturn} ETH<br />
             </Typography>
           </Grid>
           <Grid item xs={4}>

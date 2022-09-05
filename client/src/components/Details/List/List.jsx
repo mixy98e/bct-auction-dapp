@@ -12,7 +12,7 @@ import unixToDate from '../../../utils/unixToDate';
 
 const List = () => {
   const classes = useStyles();
-  const { allAuctionsDetails, currentAccount, placeBid, handleBidPriceChange } = useContext(AuctionFactoryContext);
+  const { allAuctionsDetails, searchedAuctionsDetails, currentAccount, placeBid, handleBidPriceChange } = useContext(AuctionFactoryContext);
   const { bidPrice, setBidPrice } = useState(0);
   const { ratesMap, setRatesMap } = useState(new Map());
 
@@ -22,7 +22,7 @@ const List = () => {
 
   return (
     <MUIList dense={false} className={classes.list}>
-      {allAuctionsDetails.map((auction) => (
+      {searchedAuctionsDetails.map((auction) => (
         <div>
             <ListDetailItem auction={auction} key={auction.address} />
         </div>

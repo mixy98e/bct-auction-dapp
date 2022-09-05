@@ -8,10 +8,12 @@ import Accordion from '../Accordion/Accordion';
 import useStyles from './styles';
 import { AuctionFactoryContext } from '../../../../context/AuctionFactoryContext';
 import unixToDate from '../../../../utils/unixToDate';
+import compareDate from '../../../../utils/compareDate';
+import calculateTimeLeft from '../../../../utils/calculateTimeLeft';
 
 const ListDetailItem = ({auction}) => {
   const classes = useStyles();
-  const { currentAccount, placeBid, rateOwner } = useContext(AuctionFactoryContext);
+  const { currentAccount, placeBid, rateOwner, withdrawAssets } = useContext(AuctionFactoryContext);
   const [ bidPrice, setBidPrice ] = useState(0);
   const [ rateValue, setRateValue ] = useState(0);
 
@@ -30,22 +32,36 @@ const ListDetailItem = ({auction}) => {
     }
   }
 
+  const submitWithdraw = async (auctionAddress) => {
+    withdrawAssets(auctionAddress);
+  }
+
 
   return (
     <Slide direction="down" in mountOnEnter unmountOnExit key={auction.address}>
       <div  style={{/*borderBottom: '1px solid lightgray',*/ paddingTop: '15px', marginBottom: '10px'}}>
         <ListItem>
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
+            <Avatar className={compareDate(auction.auctionEndTime) ? classes.avatarGreen : classes.avaterRed}>
               <Gavel />
             </Avatar>
           </ListItemAvatar>
           <div style={{display: 'flex', flexDirection: "column"}}>
             <ListItemText secondary={`Auction: ${auction.address}`} />
             {/* <ListItemText secondary={`Owner: ${auction.beneficiary}`} /> */}
-            <Chip className={ currentAccount === auction.highestBidder ? classes.chipStyleGreen : classes.chipStyleRed}
-                  label={`Current value: ${auction.highestBid} ETH - Ending time: ${unixToDate(auction.auctionEndTime)}`} 
-                  variant="outlined" />
+            <div style={{maxWidth: '404px'}}>
+              <strong>
+                <Chip className={compareDate(auction.auctionEndTime) ? classes.chipStyleGreen : classes.chipStyleRed}
+                    label={`Current value: ${auction.highestBid} ETH - Ending time: ${unixToDate(auction.auctionEndTime)}`} 
+                    variant="outlined" />
+              </strong>
+              <div style={{height: '4px'}}></div>
+              {auction.pendingReturn > 0  &&  (
+                <Button className={classes.button} variant="outlined" color="secondary"  onClick={() => submitWithdraw(auction.address)}>
+                  Withdraw:&nbsp;&nbsp; <strong>{auction.pendingReturn} ETH</strong>
+                </Button>
+              )}
+            </div>
             <div style={{height: '1px'}}></div>
             {/* <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} /> */}
           </div>
@@ -57,20 +73,20 @@ const ListDetailItem = ({auction}) => {
               <Delete />
             </IconButton> */}
 
-            <div style={{display: 'flex', flexDirection: "column", height: '100%', paddingTop: ''}}>
+            <div style={{display: 'flex', flexDirection: "column", maxWidth: '230px', height: '100%', paddingTop: ''}}>
               <FormControl>
                 <TextField label="You're price (ETH)" type="number" fullWidth onChange={(e) => setBidPrice(e.target.value)}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="start">
-                      <Icon icon="cib:ethereum" style={{color: 'purple'}} />
+                      <span style={{color: '#673ab7'}} >{calculateTimeLeft(auction.auctionTimeLeft)}</span>
+                      <Icon icon="cib:ethereum" style={{color: '#673ab7'}} />
                     </InputAdornment>
                     )
                   }}/>
               </FormControl>
               <FormControl style={{paddingTop: "4px"}}>
                 <Button className={classes.button} variant="outlined" color="primary"  onClick={() => submitBidPlacement(auction.address)}>Place bid</Button>
-                
               </FormControl>
               <div style={{ paddingTop: '5px', display: 'flex', justifyContent: 'start' }}>
               <Rating name={`simple-controlled-adr:${auction.address}`} value={rateValue} key={auction.address} onChange={(event, newValue) => { setRateValue(newValue) }} />
