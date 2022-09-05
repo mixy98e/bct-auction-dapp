@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Card, CardHeader, CardContent, Typography, Button, Grid, FormControl, TextField } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { InputAdornment } from '@material-ui/core';
@@ -7,17 +7,31 @@ import { Search, TimeToLeaveSharp } from '@material-ui/icons';
 // import { Doughnut } from 'react-chartjs-2';
 import useStyles from './styles';
 import useTransactions from '../../useTransactions';
-
+import { AuctionFactoryContext } from '../../context/AuctionFactoryContext';
 
 const NavbarCard = ({ title, subheader }) => {
+  const { filterSearch, filterSearchByAddress } = useContext(AuctionFactoryContext);
   const { total, chartData } = useTransactions(title);
   const [view, setView] = React.useState('allAuctions');
+  const classes = useStyles();
   
   const handleViewChange = (event, newView) => {
     setView(newView);
-    // here will go filter invocation
-    // filter will be passed to Details/List via separate context
+    filterSearch(newView);
+    if(newView === null){
+      setView('allAuctions');
+    }
   };
+
+  const handleSearchByAddress = (event) => {
+    if(event.target.value === '') {
+      filterSearchByAddress(event.target.value);
+      setView('allAuctions');
+    } else {
+      filterSearchByAddress(event.target.value)
+      setView('');
+    }
+  }
 
   const control = {
     value: view,
@@ -25,7 +39,6 @@ const NavbarCard = ({ title, subheader }) => {
     exclusive: true,
   };
 
-  const classes = useStyles();
   
   
 
@@ -39,7 +52,7 @@ const NavbarCard = ({ title, subheader }) => {
             <FormControl fullWidth>
               <TextField label="Search for auction by address" 
                     type="text" 
-                    /*value={} onChange={(e) => setFormData({ ...formData, timeToEnd: e.target.value })}*/ 
+                    onChange={(e) => handleSearchByAddress(e)}
                     fullWidth 
                     InputProps={{
                       endAdornment: (

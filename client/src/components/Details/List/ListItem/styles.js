@@ -35,5 +35,12 @@ export default makeStyles((theme) => ({
     },
     elFlexResize: {
         flexGrow: '1'
+    },
+    button: {
+        width: '100%'
+    },
+    buttonWithdraw: {
+        width: '100%',
+        paddingTop: '4px'
     }
 }));

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ethers, BigNumber } from 'ethers';
-// import Web3 from 'web3';
 
 import { contractABIAuctionFactory, contractAddressFactory, contractABISimpleAuction } from '../utils/constants';
 import hexToEth from '../utils/hexToEth';
 import hexToDecimal from '../utils/hexToDecimal';
+import compareDate from '../utils/compareDate';
 
 
 export const AuctionFactoryContext = React.createContext();
@@ -13,22 +13,14 @@ const { ethereum } = window;
 const provider = new ethers.providers.Web3Provider(ethereum);
 
 const getFactoryEthereumContract = () => {
-    // const provider = new ethers.providers.Web3Provider(ethereum);
-
     const signer = provider.getSigner();
-
     const auctionFactoryContract = new ethers.Contract(contractAddressFactory, contractABIAuctionFactory, signer);
-
     return auctionFactoryContract;
 }
 
-
 const getSimpleAuctionEthereumContract = (contractAddress) => {
-    // const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
-
     const simpleAuctionContract = new ethers.Contract(contractAddress, contractABISimpleAuction, signer);
-
     return simpleAuctionContract;
 }
 
@@ -44,17 +36,13 @@ export const AuctionFactoryProvider = ({children}) => {
     const [currentRate, setCurrentRate] = useState(0.0);
     const [msg, setMsg] = useState("");
     const [open, setOpen] = useState(false);
-
     let globalSet = new Set();
     const [allAuctionsDetails, setAllAuctionsDetails] = useState([]);
+    const [searchedAuctionsDetails, setSearchedAuctionsDetails] = useState([]);
 
     const handleChange = (e, name) => {
         setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
     }
-
-    // const handleBidPriceChange = (e) => {
-    //     setBidPriceFormData(e.target.value);
-    // }
 
     const checkIfWalletIsConnected = async () => {
         try {
@@ -65,7 +53,6 @@ export const AuctionFactoryProvider = ({children}) => {
                 setCurrentAccount(accounts[0]);
                 fetchAllAuctions();
                 getCurrentAccountRates(accounts[0]);
-                // fetchAuctionBidders();
 
                 // get my auctions
                 // ...
@@ -147,15 +134,6 @@ export const AuctionFactoryProvider = ({children}) => {
         }
     }
 
-    const fetchAuctionBidders = async (/*auctionAddress*/) => {
-        // console.log('fetchAuctionBidders')
-        // const simpleAuctionContract = getSimpleAuctionEthereumContract('0x26f2eE64B5387D72Da29025Ce777B7657396eb5d');
-        // console.log('contract', simpleAuctionContract)
-        // const allAuctionBidders = await simpleAuctionContract.pendingReturns();
-        // // auctionBidders.set(auctionAddress, allAuctionBidders);
-        // console.log('ALL AUCTION BIDDERS', allAuctionBidders);
-    }
-
     const fetchAuctionDetails = async (allAuctionsParam) => {
         try {
             const accounts = await ethereum.request({ method: 'eth_accounts'});
@@ -171,8 +149,10 @@ export const AuctionFactoryProvider = ({children}) => {
                     simpleAuctionContract.highestBid(),
                     simpleAuctionContract.pendingReturns(accounts[0]) || 0x0
                 );
+                registerHighestBidIncreasedEvent(simpleAuctionContract, el);
+                registerAuctionEndedEvent(simpleAuctionContract, el);
             });
-            setAllAuctionsDetails(auctionDetailsTemp);
+            // setAllAuctionsDetails(auctionDetailsTemp);
         } catch (error) {
             console.log(error);
             throw new Error("No ethereum object or contract fail.");
@@ -188,12 +168,48 @@ export const AuctionFactoryProvider = ({children}) => {
         tempAuctionDetailsObject['highestBidder'] = await highestBidder;
         tempAuctionDetailsObject['highestBid'] = hexToEth((await highestBid)._hex);
         tempAuctionDetailsObject['pendingReturn'] = hexToEth((await pendingReturn)._hex);
+        tempAuctionDetailsObject['auctionTimeLeft'] = hexToDecimal((await auctionEndTime)._hex);
         tempAuctionDetailsArray.push(tempAuctionDetailsObject);
 
         console.log(tempAuctionDetailsObject)
         globalSet.add(tempAuctionDetailsObject);
         // allAuctionsDetails.push(tempAuctionDetailsObject);
         setAllAuctionsDetails([...globalSet]);
+        setSearchedAuctionsDetails([...globalSet]);
+    }
+
+    const registerHighestBidIncreasedEvent = async (contract, address) => {
+        contract.on("HighestBidIncreased", (bidder, amount) => {
+            // Emitted on every block change
+            console.log("HighestBidIncreased triggered",bidder, amount);
+            handleHighestBidIncreasedEvent(bidder, amount, address);
+        });
+    }
+
+    const handleHighestBidIncreasedEvent = async (bidder, amount, contractAddress) => {
+        console.log("HANDLER", bidder, amount, contractAddress);
+        let allAuctionDetailsTemp = allAuctionsDetails;
+        allAuctionDetailsTemp.forEach(auction => {
+            if (auction.address.toLowerCase() === contractAddress.toLowerCase()) {
+                auction.highestBidder = bidder;
+                auction.highestBid = hexToEth(amount._hex);
+            }
+        })
+        console.log(allAuctionDetailsTemp);
+        setAllAuctionsDetails(allAuctionDetailsTemp);
+        setSearchedAuctionsDetails(allAuctionDetailsTemp);
+    }
+
+    const registerAuctionEndedEvent = async (contract, address) => {
+        contract.on("AuctionEnded", (winner, amount) => {
+            // Emitted on every block change
+            console.log("AuctionEnded triggered",winner, amount);
+            handleAuctionEndedEvent(winner, amount, address, contract);
+        });
+    }
+
+    const handleAuctionEndedEvent = async (winner, amount, address, contract) => {
+        await contract.auctionEnd();
     }
 
     const placeBid = async (auctionAddress, bidPriceFormData) => {
@@ -267,6 +283,52 @@ export const AuctionFactoryProvider = ({children}) => {
         }
     }
 
+    const filterSearch = async (filter) => {
+        setSearchedAuctionsDetails([]);
+        switch (filter) {
+            case 'allAuctions':
+                setSearchedAuctionsDetails(allAuctionsDetails);
+                break;
+            case 'activeAuctions':
+                setSearchedAuctionsDetails(allAuctionsDetails.filter(auction => compareDate(auction.auctionEndTime)));
+                break;
+            case 'myBids':
+                setSearchedAuctionsDetails(allAuctionsDetails.filter(auction => auction.pendingReturn > 0 || auction.highestBidder.toLowerCase() === currentAccount.toLowerCase()));
+                break;
+            case 'auctionsWon':
+                setSearchedAuctionsDetails(allAuctionsDetails.filter(auction => !compareDate(auction.auctionEndTime) && auction.highestBidder.toLowerCase() === currentAccount.toLowerCase()));
+                break;
+            case 'myAuctions':
+                console.log(currentAccount)
+                console.log(allAuctionsDetails[0].beneficiary)
+                setSearchedAuctionsDetails(allAuctionsDetails.filter(auction => auction.beneficiary.toLowerCase() === currentAccount.toLowerCase()));
+                break;
+            default:
+                setSearchedAuctionsDetails(allAuctionsDetails);
+                break;
+        }
+    }
+
+    const filterSearchByAddress = async (address) => {
+        if(address === '') {
+            setSearchedAuctionsDetails(allAuctionsDetails);
+        } else {
+            setSearchedAuctionsDetails(allAuctionsDetails.filter(auction => auction.address.toLowerCase() === address.toLowerCase()));
+        }
+    }
+
+
+    const test = async (auctionAddress) => {
+        const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
+    }
+
+
+    const tickTime = async () => {
+        setInterval(() => {
+            
+        }, 500);
+    }
+
 
     useEffect(() => {
         checkIfWalletIsConnected();
@@ -283,6 +345,7 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 allAuctions,
                                                 fetchAllAuctions,
                                                 allAuctionsDetails,
+                                                searchedAuctionsDetails,
                                                 fetchAuctionDetails,
                                                 placeBid,
                                                 auctionBidders,
@@ -291,7 +354,9 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 msg,
                                                 open,
                                                 setOpen,
-                                                withdrawAssets
+                                                withdrawAssets,
+                                                filterSearch,
+                                                filterSearchByAddress
                                             }}>
             {children}
         </AuctionFactoryContext.Provider>

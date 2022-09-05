@@ -9,6 +9,7 @@ import useStyles from './styles';
 import { AuctionFactoryContext } from '../../../../context/AuctionFactoryContext';
 import unixToDate from '../../../../utils/unixToDate';
 import compareDate from '../../../../utils/compareDate';
+import calculateTimeLeft from '../../../../utils/calculateTimeLeft';
 
 const ListDetailItem = ({auction}) => {
   const classes = useStyles();
@@ -48,16 +49,19 @@ const ListDetailItem = ({auction}) => {
           <div style={{display: 'flex', flexDirection: "column"}}>
             <ListItemText secondary={`Auction: ${auction.address}`} />
             {/* <ListItemText secondary={`Owner: ${auction.beneficiary}`} /> */}
-            <strong>
-              <Chip className={compareDate(auction.auctionEndTime) ? classes.chipStyleGreen : classes.chipStyleRed}
-                  label={`Current value: ${auction.highestBid} ETH - Ending time: ${unixToDate(auction.auctionEndTime)}`} 
-                  variant="outlined" />
-            </strong>
-            {auction.pendingReturn > 0  &&  (
-              <Button className={classes.button} variant="outlined" color="secondary"  onClick={() => submitWithdraw(auction.address)}>
-                Withdraw:&nbsp;&nbsp; <strong>{auction.pendingReturn} ETH</strong>
-              </Button>
-            )}
+            <div style={{maxWidth: '404px'}}>
+              <strong>
+                <Chip className={compareDate(auction.auctionEndTime) ? classes.chipStyleGreen : classes.chipStyleRed}
+                    label={`Current value: ${auction.highestBid} ETH - Ending time: ${unixToDate(auction.auctionEndTime)}`} 
+                    variant="outlined" />
+              </strong>
+              <div style={{height: '4px'}}></div>
+              {auction.pendingReturn > 0  &&  (
+                <Button className={classes.button} variant="outlined" color="secondary"  onClick={() => submitWithdraw(auction.address)}>
+                  Withdraw:&nbsp;&nbsp; <strong>{auction.pendingReturn} ETH</strong>
+                </Button>
+              )}
+            </div>
             <div style={{height: '1px'}}></div>
             {/* <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} /> */}
           </div>
@@ -69,12 +73,13 @@ const ListDetailItem = ({auction}) => {
               <Delete />
             </IconButton> */}
 
-            <div style={{display: 'flex', flexDirection: "column", height: '100%', paddingTop: ''}}>
+            <div style={{display: 'flex', flexDirection: "column", maxWidth: '230px', height: '100%', paddingTop: ''}}>
               <FormControl>
                 <TextField label="You're price (ETH)" type="number" fullWidth onChange={(e) => setBidPrice(e.target.value)}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="start">
+                      <span style={{color: '#673ab7'}} >{calculateTimeLeft(auction.auctionTimeLeft)}</span>
                       <Icon icon="cib:ethereum" style={{color: '#673ab7'}} />
                     </InputAdornment>
                     )
