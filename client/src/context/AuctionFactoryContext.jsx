@@ -209,7 +209,7 @@ export const AuctionFactoryProvider = ({children}) => {
     }
 
     const handleAuctionEndedEvent = async (winner, amount, address, contract) => {
-        await contract.auctionEnd();
+        // await contract.auctionEnd();
     }
 
     const placeBid = async (auctionAddress, bidPriceFormData) => {
@@ -318,15 +318,16 @@ export const AuctionFactoryProvider = ({children}) => {
     }
 
 
-    const test = async (auctionAddress) => {
-        const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
-    }
-
-
-    const tickTime = async () => {
-        setInterval(() => {
-            
-        }, 500);
+    const endAuction = async (auctionAddress) => {
+        try {
+            const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
+            await simpleAuctionContract.auctionEnd();
+        } catch (error) {
+            console.log(error);
+            setMsg("You already collected assets from this auction!");
+            setOpen(true);
+            throw new Error("Ethereum transaction invalid.");
+        }
     }
 
 
@@ -356,7 +357,8 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 setOpen,
                                                 withdrawAssets,
                                                 filterSearch,
-                                                filterSearchByAddress
+                                                filterSearchByAddress,
+                                                endAuction
                                             }}>
             {children}
         </AuctionFactoryContext.Provider>
