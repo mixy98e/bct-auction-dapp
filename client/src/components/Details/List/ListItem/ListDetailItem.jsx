@@ -48,7 +48,6 @@ const ListDetailItem = ({auction}) => {
           </ListItemAvatar>
           <div style={{display: 'flex', flexDirection: "column"}}>
             <ListItemText secondary={`Auction: ${auction.address}`} />
-            {/* <ListItemText secondary={`Owner: ${auction.beneficiary}`} /> */}
             <div style={{maxWidth: '404px'}}>
               <strong>
                 <Chip className={compareDate(auction.auctionEndTime) ? classes.chipStyleGreen : classes.chipStyleRed}
@@ -63,16 +62,8 @@ const ListDetailItem = ({auction}) => {
               )}
             </div>
             <div style={{height: '1px'}}></div>
-            {/* <ListItemText secondary={`Highest bidder: ${auction.highestBidder}`} /> */}
           </div>
           <ListItemSecondaryAction>
-            {/* <IconButton edge="end" aria-label="delete" onClick={() => deleteTransaction(transaction.id)}>
-              <EmojiEvents />
-            </IconButton> */}
-            {/* <IconButton edge="end" aria-label="delete" onClick={() => deleteTransaction(transaction.id)}>
-              <Delete />
-            </IconButton> */}
-
             <div style={{display: 'flex', flexDirection: "column", maxWidth: '230px', height: '100%', paddingTop: ''}}>
               <FormControl>
                 <TextField label="You're price (ETH)" type="number" fullWidth onChange={(e) => setBidPrice(e.target.value)}

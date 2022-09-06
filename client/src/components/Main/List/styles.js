@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { red, green, blue } from '@material-ui/core/colors';
-import { Visibility } from '@material-ui/icons';
 
 export default makeStyles((theme) => ({
   avatarGreen: {
