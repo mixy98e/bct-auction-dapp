@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 const TIME_END = 3600 * 25;
-const ACCOUNT_0 = '0xd405Dc6A4E49B6879862F093d11a0fe0c5547a9F';
+const ACCOUNT_0 = '0x64dd166c68E25D3bA0D1f56A45D05a98Fd87a926';
 
 describe("SimpleAuction", function () {
     this.timeout(5000);
