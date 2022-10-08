@@ -216,6 +216,17 @@ export const AuctionFactoryProvider = ({children}) => {
         try {
             if(!ethereum) 
                 return alert("Please connect or install metamask");
+            let own = false;
+            allAuctionsDetails.forEach(e => {
+                if((e.address.toLowerCase() === auctionAddress.toLowerCase()) &&
+                    (e.beneficiary.toLowerCase() === currentAccount.toLowerCase())) {
+                    setMsg("You are not eiligible to place bid on this auction!");
+                    setOpen(true);
+                    own = true;
+                }
+            })
+            if(own)
+                return;
             console.log(auctionAddress)
             const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
             setTimeout(() => {
