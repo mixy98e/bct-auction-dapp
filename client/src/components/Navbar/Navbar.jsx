@@ -4,14 +4,11 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { InputAdornment } from '@material-ui/core';
 import { Search, TimeToLeaveSharp } from '@material-ui/icons';
 
-// import { Doughnut } from 'react-chartjs-2';
 import useStyles from './styles';
-import useTransactions from '../../useTransactions';
 import { AuctionFactoryContext } from '../../context/AuctionFactoryContext';
 
 const NavbarCard = ({ title, subheader }) => {
   const { filterSearch, filterSearchByAddress } = useContext(AuctionFactoryContext);
-  const { total, chartData } = useTransactions(title);
   const [view, setView] = React.useState('allAuctions');
   const classes = useStyles();
   
@@ -64,18 +61,6 @@ const NavbarCard = ({ title, subheader }) => {
                     />
             </FormControl>
           </div>
-
-
-          
-
-          {/* <Typography variant="h5">${total}</Typography> */}
-          {/* <Doughnut data={chartData} /> */}
-          {/* <Button className={classes.button} variant="contained" color="primary" onClick={ (e) => selectCategory(e)}>My auctions</Button>
-          <Button className={classes.button} variant="outlined" color="primary" onClick={ (e) => selectCategory(e)}>All auctions</Button>
-          <Button className={classes.button} variant="outlined" color="primary" onClick={ (e) => selectCategory(e)}>Active auctions</Button> */}
-          {/* <Button className={classes.button} variant="outlined" color="primary" onClick={ (e) => selectCategory(e)}>Voted auctions</Button> */}
-            
-
           <div>
           <ToggleButtonGroup
               color="primary"

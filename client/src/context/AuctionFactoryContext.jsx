@@ -209,13 +209,24 @@ export const AuctionFactoryProvider = ({children}) => {
     }
 
     const handleAuctionEndedEvent = async (winner, amount, address, contract) => {
-        await contract.auctionEnd();
+        // await contract.auctionEnd();
     }
 
     const placeBid = async (auctionAddress, bidPriceFormData) => {
         try {
             if(!ethereum) 
                 return alert("Please connect or install metamask");
+            let own = false;
+            allAuctionsDetails.forEach(e => {
+                if((e.address.toLowerCase() === auctionAddress.toLowerCase()) &&
+                    (e.beneficiary.toLowerCase() === currentAccount.toLowerCase())) {
+                    setMsg("You are not eiligible to place bid on this auction!");
+                    setOpen(true);
+                    own = true;
+                }
+            })
+            if(own)
+                return;
             console.log(auctionAddress)
             const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
             setTimeout(() => {
@@ -318,15 +329,16 @@ export const AuctionFactoryProvider = ({children}) => {
     }
 
 
-    const test = async (auctionAddress) => {
-        const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
-    }
-
-
-    const tickTime = async () => {
-        setInterval(() => {
-            
-        }, 500);
+    const endAuction = async (auctionAddress) => {
+        try {
+            const simpleAuctionContract = await getSimpleAuctionEthereumContract(auctionAddress);
+            await simpleAuctionContract.auctionEnd();
+        } catch (error) {
+            console.log(error);
+            setMsg("You already collected assets from this auction!");
+            setOpen(true);
+            throw new Error("Ethereum transaction invalid.");
+        }
     }
 
 
@@ -356,7 +368,8 @@ export const AuctionFactoryProvider = ({children}) => {
                                                 setOpen,
                                                 withdrawAssets,
                                                 filterSearch,
-                                                filterSearchByAddress
+                                                filterSearchByAddress,
+                                                endAuction
                                             }}>
             {children}
         </AuctionFactoryContext.Provider>

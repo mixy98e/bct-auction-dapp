@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { red, green, blue } from '@material-ui/core/colors';
-import { Visibility } from '@material-ui/icons';
 
 export default makeStyles((theme) => ({
   avatarGreen: {
@@ -26,7 +25,8 @@ export default makeStyles((theme) => ({
   chipWonVisible: {
     color: "#D9AE5F",
     borderColor: "#A6882E",
-    cursor: "pointer"
+    cursor: "pointer",
+    minWidth: '130px'
   },
   chipLossVisible: {
     color: "#BF0041",
