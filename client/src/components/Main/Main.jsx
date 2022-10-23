@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardHeader, CardContent, Typography, Grid, Divider } from '@material-ui/core';
 import Identicon from 'identicon.js';
-import { ExpenseTrackerContext } from '../../context/context';
 import useStyles from './styles';
 import Form from './Form/Form';
 import List from './List/List';
 import { Star } from '@material-ui/icons';
-import InfoCard from '../InfoCard';
 import { AuctionFactoryContext } from '../../context/AuctionFactoryContext';
 
 
 const ExpenseTracker = (props) => {
   const classes = useStyles();
   const { currentRate } = useContext(AuctionFactoryContext);
-  // const { balance } = useContext(ExpenseTrackerContext);
-  // const { currentAccount } = useContext(AuctionFactoryContext);
 
   return (
     <Card className={classes.root} style={{height: '100%'}}>
